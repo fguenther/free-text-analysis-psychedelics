@@ -1,0 +1,458 @@
+\documentclass[man,floatsintext]{apa7}
+
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{soul}
+\usepackage{arydshln}
+\usepackage{threeparttable}
+% keep every table and figure within its own section (no drifting to the end)
+\usepackage[section]{placeins}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+\usepackage{soul}
+\usepackage[utf8]{inputenc}
+\usepackage[export]{adjustbox}
+\usepackage[style=apa,sortcites=true,sorting=nyt,backend=biber]{biblatex}
+
+\DeclareFieldFormat{apacase}{#1}
+
+\addbibresource{lit.bib}
+
+% synthetic-data version: the revision markup is printed as plain text, so
+% that only purple (synthetic results) and red (text that does not fit them)
+% carry meaning
+\newcommand{\change}[1]{#1}
+
+% All numbers from the analysis: \res{<key>}, written by run_all.R
+% (keys and values are listed in generated/results.tex)
+\input{generated/results}
+
+\title{Improving predictive accuracy for clinical outcomes with LLM text embeddings for open-ended free-text responses: A case study on reports of psychedelic experiences}
+\authorsnames[1,1,{1,2},1,{1,2},{1,2,*},{1,2,*}]{{Fritz G\"unther},{Mathis Parent-Couture},{Abdo Uyar},{Klara Wieczorke},{Ulrike Lueken},{Ricarda Evens},{Max Wolff}}
+\authorsaffiliations{{Department of Psychology, Humboldt-Universit\"at zu Berlin, Berlin, Germany},{German Center for Mental Health (DZPG), partner site Berlin-Potsdam, Berlin, Germany}}
+
+\note{\vspace{7mm}Corresponding author: \\Fritz G\"unther \\ Unter den Linden 6, 10099 Berlin \\ fritz.guenther{@}hu-berlin.de}
+
+\authornote{
+  *These authors contributed equally to this work and share last authorship.\\
+  This study was funded by the German Research Foundation (DFG, Emmy-Noether grant ``What's in a name?'', 459717703, Fritz G\"unther). 
+}
+
+\shorttitle{Predictions from free-text responses in clinical studies}
+
+\abstract{
+Clinical studies regularly ask participants to describe their experiences in their own words. These open-ended questions are included so that participants can report what \emph{they themselves} consider relevant, and ideally researchers want to harvest this information. In practice however, these responses are rarely analyzed and often effectively discarded, since translating them into a useful quantitative format for further analysis traditionally required trained coders or advanced technical skills. Current transformer-based language models offer an appealing alternative option to quantify text: they internally represent \emph{any} text input as high-dimensional numerical representations called text embeddings. From available open-weight models, these text embeddings can be freely extracted on a local machine. As text embeddings are just vectors of numbers, they can be plugged as predictors into standard statistical analyses. Here, we applied this to three large datasets in which participants described their experiences in the context of psychedelic substance use. We investigated whether text embeddings of these free-text descriptions improve cross-validated, \change{held-out} predictions of clinically relevant outcomes (\change{well-being, change in well-being, change in psychological flexibility, post-traumatic symptom severity, post-traumatic growth}) after we control for a range of other predictors capturing demographic information, the setting of the experience, and a series of questionnaire data. We found \change{reliable} increases in predictive accuracy for \change{three} of the five outcomes \change{(change in well-being and psychological flexibility,  post-traumatic symptom severity)}, \change{in two of the three datasets}. Some of these increases are substantial.  We therefore recommend (where possible) the inclusion of  open-ended questions in any questionnaire, and to actually pass this information to analysis, to efficiently capture valuable information that would otherwise be lost.
+}
+
+\keywords{free-text responses, text embeddings, natural language processing, incremental validity, psychedelics}
+
+
+\begin{document}
+	\maketitle
+
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small\textbf{Synthetic-data version.} This is the manuscript of the study, built by the pipeline of the public repository on a \emph{synthetic} dataset with newly written free-text responses and a planted text signal (the participant data cannot be published). The text of the manuscript is unchanged. \synth{Purple}: every number, table entry, example response and figure produced by the pipeline from the synthetic data. \synthmismatch{Red}: sentences that do not fit the synthetic results or describe only the original data.}}
+
+In psychology, as in any empirical science, we rely on empirical data to test our hypotheses and draw theoretical conclusions. These data come in different formats. Much of the data used in our studies is inherently quantitative, collected as or straightforwardly converted into numbers, such as Likert-scale ratings in questionnaires, response times, or EEG signals; but also categorical data  can be encoded via indicator variables with different coding schemes. The disciplines of psychological methods, psychometrics, and diagnostics have developed sophisticated toolkits to deal with quantitative data, and much of our standard statistical toolkit as psychologists is tailored towards this data format. In line with this, questionnaires often make heavy use of closed-form item formats, as exemplified by the aforementioned Likert-scales. 
+
+However, not all data is easily converted into quantitative data. A prominent exception in psychology are free-text responses  where participants answer a question verbally. These are often presented as open-ended questions, without pre-defined response categories.\footnote{Free-text responses are not necessarily open-ended: A question about the country of residence has a restricted response set, but the response format can still be free text.} Language is the natural way for most humans to express their thoughts and feelings, and each of us has spent a lifetime mastering this specific medium of providing information to others \parencite{kjell2023text,tausczik2010psychological}. From a data analysis side however, this data has long been notoriously difficult to deal with, which often resulted in gaps between  study designs and  data analyses: On the one hand, psychologists value free-text responses to open-ended questions (such as ``Please describe your traumatic experience''), consider them informative, and consequently regularly include them in their questionnaires \parencite{schuman1979open,singer2017some}. This illustrates a clear belief on side of the researchers that there is valuable information in these free-text responses. In open-ended free-text responses, participants can provide rich and varied reports about their unique experiences, problems, issues, and strategies. Crucially, they can provide information they themselves deem important, and that the researcher may have missed to look out for with their data collection tools. On the other hand however, this data usually does not enter the data analysis and is, effectively speaking, discarded \parencite{singer2017some,roberts2014structural}. Thus, the valuable information assumed to be provided in these responses is simply lost.
+
+Of course, data analysis techniques that turn free-text responses into quantitative data have been at our disposal for a long time. A straightforward option is to encode them as categorical data. This works as long as the set of response options is finite and thus not truly open-ended (e.g., "country of residence"), or if the vast majority of responses fall on a relatively restricted set and one is willing to accept an "other" category. For more nuanced responses to truly open-ended questions such as "please describe your relationship to your mother", simply coding the responses as "good", "bad", "okay" is doing the participants and researchers a disservice. To counteract this, more sophisticated annotation methods such as qualitative content analysis \parencite{mayring2014qualitative} or thematic analysis \parencite{braun2006using}, often implemented in dedicated software such as MAXQDA \parencite{maxqda}, have been developed. While these are often regarded as \emph{qualitative} rather than \emph{quantitative} analysis techniques, this describes the annotation process more than the outcome: While it is indeed true that (trained human) annotators rely on qualitative judgments to develop the annotation schemes, a proper annotation can arrive at a quantitative (vector) representation of the text (with, for example, dimensions such as "single parent: 0/1"). 
+
+The present study does not intend to pass judgment on the outcomes and quality of such techniques. However, qualitative data analysis is a skill that requires intensive training, and that requires a lot of time to properly apply \parencite{braun2006using,oconnor2020intercoder}. As coding categories may repeatedly have to be re-visited with new free-text data points, scalability to large datasets can also become a serious issue. 
+
+\change{Automated alternatives exist, but come with their own limits. Dictionary approaches such as LIWC (\emph{Linguistic Inquiry and Word Count}; \cite{tausczik2010psychological,boyd2021natural}) count words from pre-defined categories; these methods re-introduce a top-down filter that open-ended questions seek to avoid in the first place \parencite{schwartz2013personality}, are susceptible to surface-level word form variations in addition to the relevant semantic information, and largely ignore context information. Topic models \parencite{Blei2003,roberts2014structural} need large corpora and mainly describe \emph{what} is discussed, not whether it adds predictive information. Supervised classifiers, finally, require manually annotated training data. The often small sample sizes typical of clinical studies can place strong limitations on the applicability of such methods.}
+
+Current developments in Natural Language Processing (NLP), the AI/machine learning discipline concerned with quantifying text data, offer a promising solution to these issues. Over the last years, the rise of Large Language Models (LLMs) could not be overlooked \parencite{brown2020language,demszky2023using}, and it \change{is increasingly clear} that these models develop good representations of the text presented to them. Critically for our purposes, we can access these internal representations. The engine of modern LLMs remains the transformer architecture \parencite{Vaswani2017}, a very deep neural network that at its core is trained to predict missing or upcoming tokens (which can be words but also sub-word units) based on the  tokens already present in the input (for example, prompts that users provide to the model; \cite{Devlin:2019,brown2020language}). As a neural network, the transformer represents its input as numbers (a binary vector which words are present in the input), which are repeatedly transformed into other vectors through a series of complex operations (for overviews, see for example \cite{Cassani2023,gunther2026large}) before eventually arriving at a probability distribution for the prediction of the missing/upcoming token. Critically, these ``other vectors'' -- the so-called \emph{text embeddings} -- are the model's internal representations of the input text that enable it to successfully perform its task. For our purposes, this provides us with quantitative representations of any input text as text embeddings (that is, vectors of numbers) which we can then plug into our familiar quantitative data analysis techniques \parencite{debelak2025embeddings,Kjell2019,kjell2023text}. \change{Since such embeddings are extracted from large and general pre-trained models without any fine-tuning on or adjustment to the data of a given study, they are available even for single pieces of text, and thus also for free-text responses in studies with small sample sizes.}
+
+In the present study, we demonstrate that this allows us to establish automated pipelines to utilize free-text responses in clinical studies, without requiring any human annotation (see also \cite{eichstaedt2018facebook,kjell2022natural}). Specifically, we present three studies with large datasets on the effects of psychedelic experiences after substance use \parencite{evens2026post,wolff2022acceptance,wolff2024measuring}. We show that making use of the rich information contained in free-text responses allows us to achieve sometimes substantial gains in predictive accuracy even when we consider large sets of other predictors, for relevant clinical outcomes, such as psychological well-being or post-traumatic symptom severity.
+
+
+\section{Method}
+
+We first describe the three datasets we analyse (APEQ, \cite{wolff2022acceptance}; GCMQ, \cite{wolff2024measuring}; and PTSD, \cite{evens2026post}), with all variables used in our analyses (outcome variables, free-text responses, and all other predictors), before we describe the text embedding method at the end of this section. Figure~\ref{fig:pipeline} provides a schematic overview of the overall analysis pipeline employed in our study.
+
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=1\linewidth]{workflow.pdf}
+    \caption{Simplified overview of the overall analysis pipeline employed in our study}
+    \label{fig:pipeline}
+\end{figure}
+
+\subsection{Datasets}
+
+A summary overview of all datasets is provided in Table~\ref{tab:results_summary}.
+
+
+\begin{table}[!htbp]
+\small\renewcommand{\arraystretch}{0.9}%
+
+    \caption{Overview of the datasets and main results for all outcome variables considered here. \change{$R^2$ values are cross-validated (held-out) $R^2$ from the repeated nested cross-validation, with \res{set.nprin} PCA components per free-text response. The baseline + text model contains all free-text responses of the dataset (the pre-specified test); $\Delta R^2$ is tested with the corrected repeated $k$-fold $t$-test.}}
+
+    \centering
+    \begin{threeparttable}
+
+    \input{generated/tab_summary_e5}
+
+\begin{tablenotes}[flushleft]
+\small
+\item \change{\textit{Note.}\\ \textit{APEQ}: Acceptance/Avoidance-Promoting Experiences Questionnaire, \cite{wolff2022acceptance}, \textit{WHO-5}: WHO well-being index , \textit{AAQ-II}: Acceptance and Action
+Questionnaire II\\ \textit{GCMQ}: General Change Mechanisms Questionnaire \cite{wolff2024measuring}, \textit{WEMWBS}: Warwick-Edinburgh Mental Wellbeing Scale, \\ \textit{PTSD}: Post-traumatic stress disorder symptoms \cite{evens2026post}, \textit{PCL-5}: PTSD Checklist for DSM-5, \textit{PTGI}:  Post-Traumatic Growth Inventory.}
+\end{tablenotes}
+
+
+\end{threeparttable}
+    \label{tab:results_summary}
+\end{table}
+
+
+\subsubsection{APEQ}
+
+The first dataset was collected by \textcite{wolff2022acceptance}, originally for the creation and validation of the \emph{Acceptance/Avoidance-Promoting Experiences Questionnaire} (APEQ), a questionnaire \change{designed to measure motivational, emotional, cognitive aspects of (acceptance- and avoidance-related) psychedelic experiences}.
+\textcite{wolff2022acceptance} collected data from \change{\res{n.apeq.raw} participants; after applying the exclusion criteria of the original study, data from \res{n.apeq.after-exclusion} participants remain (\res{n.apeq.after-exclusion-language.eng} English- and \res{n.apeq.after-exclusion-language.ger} German-speaking),} who each reported on one psychedelic experience (clearly discernible psychoactive effects) following the use of different substances (LSD, psilocybin, mescaline, or ayahuasca). Participants were instructed that both positive and negative experiences could be reported on.
+
+\paragraph{Outcome variables:} In the analysis of the APEQ data, our main outcome variable of interest is the  change in subjective well-being (assessed via the WHO-5 well-being index, \cite{topp2015}) from before to after the psychedelic experience. Both the "before" and "after" rating were assessed retrospectively by the participants, \change{and the change score was computed as the difference between the two scores}. Subjective well-being is an ideal outcome variable in this setting: On the one hand, it is a very general variable that is influenced by many different factors \change{\parencite{dolan2008we}}; on the other hand, as a measure of general life satisfaction, it is of immediate practical importance to practitioners and patients.
+
+
+As a secondary outcome variable, we also considered difference in psychological flexibility before and after the psychedelic experience, which is the variable which \textcite{wolff2022acceptance} used to validate the APEQ questionnaire. Both the "before" and "after" rating were assessed retrospectively by the participants via the AAQ-II (Acceptance and Action Questionnaire II; \cite{bond2011preliminary,hoyer2013psychologische}). \change{Note that the AAQ is coded so that higher values indicate \emph{less flexibility}. Consequently, negative changes indicate an \emph{increase} in flexibility.  This is also reflected in the strong negative correlation ($r = \res{apeq.cor.who.aaq}$) between WHO-5 differences and AAQ-II differences in the data. We will note this again in the respective results sections.}
+
+\paragraph{Free-text responses.} After questions on demographic data and mental health issues/diagnoses, participants were asked to describe the psychedelic experience in a free-text format, either in English or German. This free-text data is available from \res{n.apeq.with-text} participants (\res{n.apeq.with-text-language.eng} English-speaking, \res{n.apeq.with-text-language.ger} German-speaking). Only data from these \res{n.apeq.with-text} participants is passed on to further analysis.
+
+\paragraph{Other predictor variables.} In addition to the free-text responses, participants answered a series of questionnaires (see  \cite{wolff2022acceptance} for detailed information). Here, we consider the following relevant variables:
+\begin{itemize}
+    \item \textbf{Demographic:} age, gender [female, male, other], education level [primary, intermediate, higher]; native language [English, German]
+    \item \textbf{Setting (of the psychedelic experience):} substance taken, subjective strength of the dose, \change{subjective strength of the effects}, duration of the episode, valence of the episode, \change{and retrospective appraisal of the episode (how positive/negative it was judged in hindsight)}, mood, preparedness
+    \item \textbf{Questionnaire data:} EBI (Emotional Breakthrough Inventory, \cite{roseman2019emotional}), CEQ (Challenging Experience Questionnaire, \cite{barrett2016challenging,dworatzyk2022phenomenological}), the  APEQ \parencite{wolff2022acceptance} subscales     APEQ-AVE (avoidance-related experience) and APEQ-ACE (acceptance-related experience) \change{plus their interaction term \parencite{wolff2022acceptance}}, \change{as well as Therapeutic use motives, Hedonic use motives, and Escapist use motives (factor scores from an additional questionnaire, \cite{wolff2022acceptance}).} 
+    
+\end{itemize}
+
+
+\subsubsection{GCMQ}
+
+The second dataset was collected by \textcite{wolff2024measuring} for the creation and validation of the \emph{General Change Mechanisms Questionnaire} (GCMQ). This questionnaire is \change{intended to measure psychotherapeutic or psychotherapy-like aspects of psychedelic experiences in the sense of five well-established general change mechanisms of psychotherapy:} resource activation, therapeutic relationship, problem actuation, clarification, and mastery.\textcite{wolff2024measuring} collected data from \res{n.gcmq.raw-language.eng} English-speaking and \res{n.gcmq.raw-language.ger} German-speaking participants, who each were asked to select one memorable psychedelic experience (negative or positive) to report on, and then provided responses on a series of questions and questionnaires. 
+
+
+\paragraph{Outcome variables:} In the GCMQ data, our outcome variable is mental well-being as assessed via the WEMWBS (Warwick-Edinburgh Mental Wellbeing
+Scale; \cite{tennant2007warwick}), the same variable used in the validation study by \textcite{wolff2024measuring}. Note that, in contrast to the outcome variables in the APEQ data, this is not a change score from before to after the psychedelic experience, but instead a state assessment of mental well-being in the two weeks prior to data collection.
+
+
+\paragraph{Free-text responses.} In free-text responses, participants described the impact of the psychedelic experience on (a) their handling of stressful events, and  (b) on their mental health. We thus have two different free-text responses available here, describing related but potentially different topics. Such free-text data is available from \res{n.gcmq.with-text} participants (\res{n.gcmq.with-text-language.eng} English-speaking, \res{n.gcmq.with-text-language.ger} German-speaking; roughly 2/3 of the dataset used for the APEQ analysis). Only data from these \res{n.gcmq.with-text} participants is passed on to further analysis.
+
+
+\paragraph{Other predictor variables.} In addition to the free-text responses, participants answered a series of questionnaires (see  \cite{wolff2024measuring} for detailed information). Here, we consider the following relevant variables:
+
+\begin{itemize}
+
+    \item \textbf{Demographic:} age, gender [female, male, other], education level [primary, intermediate, higher]; native language [English, German]; as well as mental disorder diagnosis [yes, no], which was further differentiated by the type of diagnosis (all yes/no: depression, anxiety, ADHD, PTSD, addiction, mania, psychosis, other) and the total number of stressful life events in the past five years (cumSLE; \cite{seery2010whatever}).  
+
+
+    \item \textbf{Setting (of the psychedelic experience):} general setting (each yes/no: nature, party, therapy, ceremony), substance taken, subjective strength of the dose,  subjective clarity of memory for the episode, valence and retrospective appraisal of the episode, suitability of the setting for having a psychedelic experience, as well as concomitant use of another substance during the experience (each yes/no: \change{none,} cannabis, alcohol, entactogens, dissociatives, stimulants, benzodiazepines, opiates, other). 
+
+    
+    \item \textbf{Questionnaire data:} EBI; CEQ; ASC-OBE (the Oceanic Boundlessness scale of the Altered States of Consciousness Questionnaire ASC; \cite{dittrich1998standardized,studerus2010psychometric}); the \change{APEQ subscales
+    APEQ-AVE and APEQ-ACE;} Therapeutic use motives, Hedonic use motives, Escapist use motives; and  the following GCMQ subscales \parencite{wolff2024measuring}: GCMQ-RA (resource activation), GCMQ-PA (problem actuation), GCMQ-CL (clarification), GCMQ-MA (mastery). The GCMQ-RE (relationship) subscale was dropped from analysis because no scores were available for \res{n.gcmq.gcmqre.missing} of the \res{n.gcmq.with-text} participants.
+    
+\end{itemize}
+
+
+\subsubsection{PTSD}
+
+The third dataset -- here labelled \emph{PTSD} -- was collected by \textcite{evens2026post} as a naturalistic survey study to investigate the development of post-traumatic stress disorder (PTSD) symptoms following psychedelic substance use. 
+
+
+\synthmismatch{\change{A total of 1,195 volunteers began the survey and 512 provided informed consent to participate. Of these, 269 participants were excluded for the following reasons: not meeting inclusion criteria (n = 90), discontinuation of the survey before completing the PCL-5 items (n = 176), free-text responses indicating a lack of genuine participation (e.g., “just reading”; n = 2), or exceeding the recommended relative speed index cut-off (> 2) without any indication of engagement in free-text comments (n = 1).}} From \textcite{evens2026post} we thus use data from \res{n.ptsd.raw-language.eng} English-speaking and \res{n.ptsd.raw-language.ger} German-speaking participants who reported distressing experiences during or beyond the acute phase. Thus, the sample constitutes a selective subset of psychedelic substance users. Participants were asked to report on this ``particularly challenging or traumatic psychedelic experience'', and additionally provided responses on a series of questions and questionnaires. 
+
+
+\paragraph{Outcome variables:} In the PTSD data, our main outcome variable is the sum score of the PCL-5 (PTSD Checklist for DSM-5; \cite{blevins2015posttraumatic,kruger2017german}), a questionnaire to assess the severity of PTSD symptoms as defined per the DSM-5 criteria. In a modification of the original instructions, participants were asked to rate their symptoms not over the past month, but specifically with reference to the month they found most challenging following their psychedelic experience. \change{PCL-5 scores are available from all \res{n.ptsd.pcl.with-outcome} participants, of which \res{n.ptsd.pcl.analysed} are analysed (\res{n.ptsd.pcl.excluded-text} participants left at least one of the free-text responses empty, see below; for \res{n.ptsd.pcl.excluded-predictor} participant, one of the other predictors is missing).}
+
+As an additional outcome variable, we also considered the sum score of the PTGI (Post-Traumatic Growth Inventory; \cite{maercker2001posttraumatic,tedeschi2004posttraumatic}), a questionnaire assessing \emph{positive} psychological change following traumatic experiences. \change{PTGI scores are only available from \res{n.ptsd.ptgi.with-outcome} participants, of which \res{n.ptsd.ptgi.analysed} are analysed (for \res{n.ptsd.ptgi.excluded-predictor} participant, one of the other predictors is missing).}
+
+
+\paragraph{Free-text responses.} \change{Participants were asked three questions to which they were instructed to provide free-text responses: 1) \textit{Acute Symptoms.} Please describe the challenging or traumatic experience you had with psychedelics. Kindly elaborate on the encounters you had during the acute substance effects. 2) \textit{Post-acute Symptoms.} Please describe all persistent symptoms or difficulties in the days, weeks, months, or years following the challenging or traumatic experience you had with psychedelics.
+3) \textit{Treatment.} Please provide a detailed description of the attempts you have made so far to address the symptoms. What have you found helpful, and what have you found to be less helpful or even harmful?} \change{Empty responses were treated as missing data (\res{n.ptsd.empty-acute} acute, \res{n.ptsd.empty-post} post-acute, and \res{n.ptsd.empty-treat} treatment responses). As all models for one outcome variable were estimated on the same participants, participants with an empty response were not included in the analyses.}
+
+
+\paragraph{Other predictor variables.} In addition to the free-text responses, participants answered a series of questionnaires (see  \change{\cite{evens2026post}} for detailed information). Here, we consider the following relevant variables:
+
+\begin{itemize}
+
+    \item \textbf{Demographic:} age, gender [female, male, \change{non-binary,} other]; native language [English, German]; country of residence \change{[countries listed $\le 5$ times among the participants with the respective outcome score were pooled into a single "other" category]}; CASMIN education level \parencite{Brauns2003CASMIN} \change{[levels listed $\le 5$ times among the participants with the respective outcome score were pooled into a single "other" category]}
+
+
+    \item \textbf{Setting (of the psychedelic experience):} Substance taken \change{(19 variables in the datasets, 7 of which are general variables on the number of substances and how they were used, and 12 dummy variables for different substances such as LSD, DMT, ...; see \cite{evens2026post})}, subjective strength of the dose, subjective clarity of memory for the episode, duration of the episode, valence as well as retrospective appraisal of the episode, how challenging the episode was perceived
+    
+    \item \textbf{Questionnaire data:} CEQ; APEQ-ACE; APEQ-AVE; \change{Self-exploration use motives, Hedonic use motives, and Escapist use motives \parencite{evens2026post}}
+    
+\end{itemize}
+
+
+\subsection{Text embeddings}
+
+The bottom part (orange track) in Figure~\ref{fig:pipeline} illustrates the text embedding pipeline schematically. 
+
+\synthmismatch{After minimal text cleaning \change{in the raw data (removal of names and personal contact data; removal of three random character strings)},} we extracted sentence embeddings \parencite{reimers2019sentence} for the free-text responses  using the R package \emph{reticulate} \parencite{reticulate}. In particular, as free-text responses are available in different languages (German and English), we selected the \emph{intfloat/multilingual-e5-large} model \parencite{wang2024multilingual} from the Hugging Face platform (\url{https://huggingface.co/intfloat/multilingual-e5-large}), which produces 1,024-dimensional embeddings for each text in 24 model layers. \synthmismatch{A robustness check with the \emph{BAAI/bge-m3} model \parencite{bge-m3} that arrives at very similar results as the main analysis is presented in the Supplementary Material.} As open model weights are downloaded from Hugging Face to a local machine for extracting text embeddings, the model runs fully offline, no third-party API is involved, and participant responses are not sent to any third party as part of this process.
+
+In datasets where we have multiple free-text responses (2 in the GCMQ data: events and health; 3 in the PTSD data: acute, post-acute, and treat), we embedded each of them separately.  With the model's context length of 512 tokens, almost all the free-text responses could be fully embedded; longer responses were truncated\footnote{Since the bge-m3 has a longer context length, all responses could be fully embedded there; see the Supplementary Material}. In line with the  multilingual-e5-large model setup, the prefix ``passage:'' was \change{prepended} to all responses before extracting the embeddings\change{ (for comparability, this was also done for the bge-m3 model, so that the two analyses differ only in the embedding model)}. Following the conventional approach (e.g., \cite{kjell2023text}), we used the embeddings in the final hidden layer of the model (before the output layer), where the embeddings are fully contextualized and make use of all learned weights of the model, for further analysis\change{. As implemented in the \emph{sentence-transformers} library, a single embedding per response was obtained by averaging over the token embeddings (multilingual-e5-large) or by taking the embedding of the initial [CLS] token (bge-m3), and normalized to unit length}.
+
+Sentence transformers produce high-dimensional representations to be able to adequately represent the vast variety of possible text (and their semantic content) that can occur in natural language. However, free-text responses describing psychedelic experiences will usually not cover the whole range of possible semantic content, and so 1,024 distinct numerical predictors for each text will not be required in our setup. In addition, text embedding dimensions can be highly collinear, especially for thematically related texts. We therefore ran a Principal Component Analysis (PCA) over all text embeddings from an individual set of free-text responses, and only retained the \res{set.nprin} first principal components. This number was held constant across all analyses for consistency. A parameter sweep for different numbers of principal components is presented in the Supplementary Material. \change{Note that the PCA ran \emph{within} the folds of the cross-validation (next section).}
+
+
+\subsection{\change{Analysis pipeline: Elastic net with cross-validation}}
+
+The central question of the present study is whether we can gain additional predictive accuracy in statistical analyses by considering  the information provided in participants' free-text responses, in the form of automatically-extracted text embeddings without any additional (human) annotation. Thus, our main focus  lies on prediction, rather than interpretations of individual model parameter estimates \parencite{yarkoni2017choosing,shmueli2010explain} -- especially since the dimensions of text embeddings are usually not directly interpretable but require additional analyses (e.g., \cite{kjell2023text,Kjell2019}). Accordingly, our metric of interest is incremental validity -- that is, increases in variance explained $\Delta R^2$ when predictor variables from text embeddings are included as \emph{additional} predictors in cross-validated regression models that are designed to counteract over-fitting.    
+
+
+For a schematic overview of the analysis pipeline, see again Figure~\ref{fig:pipeline}. To assess the added predictive accuracy brought about by free-text data, we estimated nested regression models for each outcome variable: The main analysis relies on a baseline model containing what has been defined in the Method sections as ``other predictor variables'' (the upper, blue track of Figure~\ref{fig:pipeline}), and ``extended-by-text'' models that additionally include the \res{set.nprin} text-embedding principal components for a specific free-text response (the rightmost, purple part of Figure~\ref{fig:pipeline}, combining the blue and orange tracks). 
+
+
+Depending on the number $k$ of free-text responses in a dataset, we will have a nested hierarchy of such extended-by-text models, as will be described in detail in the individual sections below. All regression models were estimated using elastic net regression \parencite{zou2005regularization}. Elastic net is a regularization technique that combines ridge and lasso penalties to shrink (ridge) and, where appropriate, eliminate (lasso) coefficients. This renders \change{it} useful to counter-act overfitting in datasets with many, potentially correlated predictors. 
+
+Model performance for each elastic net model was evaluated using \change{repeated nested} cross-validation \change{using the R package \emph{caret} \parencite{caret}}: \change{In the outer loop, the data were split into \res{set.folds} folds;} for each fold, the model was trained and model coefficients estimated on 90\% of the data, and the resulting model was then used to generate  predictions for the remaining 10\% held-out data which the model has not seen during training. \change{The PCA on the text embedding dimensions ran on the training data only, and the coefficients from the training set were then used to project the embeddings of the test set into the same lower-dimensional space (i.e., perform dimensionality reduction).} This process repeated across all folds\change{, and the whole procedure was repeated \res{set.repeats} times with different random assignments of participants to folds (i.e., \res{set.repeats}~$\times$~\res{set.folds} outer folds in total)}. The  \change{squared correlation between predicted and observed values in each held-out fold, averaged over all outer folds,} constitutes the cross-validated (\change{held-out}) $R^2$ \change{\parencite{caret}}. The elastic net hyperparameters (the mixing parameter $\alpha$ and penalty strength $\lambda$) were tuned via grid search (hyperparameter ranges: $\alpha \in [0, 1]$, \change{\res{set.alpha.n} values in steps of 0.1}; $\lambda \in [\res{set.lambda.min}, \res{set.lambda.max}]$, \res{set.lambda.n} log-spaced values)\change{, in an inner loop: Within each outer training set, we ran a \res{set.innerfolds}-fold cross-validation (again with the PCA computed on the inner training data only), selected the combination of $\alpha$ and $\lambda$ yielding the highest inner cross-validated $R^2$, and then re-fitted the model with these values on the whole outer training set. The held-out data of an outer fold were thus used neither for estimating the coefficients nor for selecting the hyperparameters, so that the cross-validated $R^2$ is not inflated by the hyperparameter selection \parencite{varma2006bias}}. Note that  \emph{different} values of $\alpha$ and $\lambda$ can thus be applied for the baseline model and the extended-by-text models \change{(as well as in different outer folds; we report their median across the outer folds)}. As our aim is to assess how much predictive information can be gauged from the predictor variables, and not how the regression models perform under exactly the same hyperparameter settings, this choice aligns with our study objectives. As noted above, the difference in cross-validated $R^2$ between the model with and without text-embedding predictors ($\Delta R^2$, also referred to as \emph{incremental validity}; \cite{hunsley2003incremental, sechrest1963incremental} ) serves as the index of the added predictive value of the free-text data.
+
+\change{To test whether the free-text data reliably increase predictive accuracy, we compared each extended-by-text model with the baseline model on the same outer folds (all models for one outcome variable were evaluated on identical outer and inner folds). For each outer fold $j$, we computed the difference $d_j$ between the held-out $R^2$ of the two models; $\Delta R^2$ is the mean of these $J = \res{set.repeats} \times \res{set.folds}$ differences. Since the training sets of different folds overlap, the $d_j$ are not independent, and a standard paired $t$-test would underestimate their variance. We therefore used a corrected repeated $k$-fold $t$-test \parencite{nadeau2003inference,bouckaert2004evaluating}, and report 95\% confidence intervals based on the same corrected standard error. In datasets with more than one free-text response, we pre-specified the extended-by-text model containing \emph{all} free-text responses as the test of incremental validity; the models with other combinations of responses are reported descriptively (their $p$-values are not corrected for multiple comparisons). The hyperparameter sweep over the number of principal components (Supplementary Material)\change{, all qualitative examples reported below, and the text signal in the overlap analysis (Table~\ref{tab:overlap})} are based on a single (non-repeated, non-nested) \res{set.folds}-fold cross-validation run.}
+
+
+\section{Results}
+
+
+A summary of the main results for all outcome variables is provided in Table~\ref{tab:results_summary}
+
+
+\subsection{APEQ}
+
+\subsubsection{Quantitative analysis.} {For the well-being difference (WHO-5) in the APEQ data, we obtain a cross-validated $R^2 = \res{e5.apeq.who.none.r2}$ for the baseline model (\change{median tuned hyperparameters across the outer folds:} $\alpha = \res{e5.apeq.who.none.alpha}$, $\lambda = \res{e5.apeq.who.none.lambda}$), and  a cross-validated $R^2 = \res{e5.apeq.who.text.r2}$ for the extended-by-text model ($\alpha = \res{e5.apeq.who.text.alpha}$, $\lambda = \res{e5.apeq.who.text.lambda}$). Consequently, we find a  $\Delta R^2 = \res{e5.apeq.who.text.delta}$ between the two models \change{(95\% CI [\res{e5.apeq.who.text.cilo}, \res{e5.apeq.who.text.cihi}], $t(\res{e5.apeq.who.text.df}) = \res{e5.apeq.who.text.t}$, \res{e5.apeq.who.text.p})}: adding the information from the free-text data in form of text embeddings increases the variance explained by \res{e5.apeq.who.text.deltapct}\% in absolute terms} (and \res{e5.apeq.who.text.relgain}\% in relative terms, starting from the baseline model's $R^2 = \res{e5.apeq.who.none.r2}$). For an elastic net model that \emph{only} takes the \res{set.nprin} text-embedding principal components as input, we already obtain a cross-validated $R^2 = \res{e5.apeq.who.textonly.r2}$.
+
+{For the change in psychological flexibility (AAQ-II), we obtain a cross-validated $R^2 = \res{e5.apeq.aaq.none.r2}$ for the baseline model (\change{median} $\alpha = \res{e5.apeq.aaq.none.alpha}$, $\lambda = \res{e5.apeq.aaq.none.lambda}$),  a cross-validated $R^2 = \res{e5.apeq.aaq.text.r2}$ for the extended-by-text model (\change{median} $\alpha = \res{e5.apeq.aaq.text.alpha}$, $\lambda = \res{e5.apeq.aaq.text.lambda}$), and consequently a $\Delta R^2 = \res{e5.apeq.aaq.text.delta}$} \change{(95\% CI [\res{e5.apeq.aaq.text.cilo}, \res{e5.apeq.aaq.text.cihi}], $t(\res{e5.apeq.aaq.text.df}) = \res{e5.apeq.aaq.text.t}$, \res{e5.apeq.aaq.text.p};} an increase of \res{e5.apeq.aaq.text.deltapct}\% in absolute terms and of \res{e5.apeq.aaq.text.relgain}\% in relative terms). Here, an elastic net model that \emph{only} takes the \res{set.nprin} text-embedding principal components as input achieves a cross-validated $R^2 = \res{e5.apeq.aaq.textonly.r2}$.
+
+
+These results already indicate that the free-text responses contain information not captured in the other predictor variables. To quantify the shared variance between the free-text data and the other predictors, \change{we regressed each of the other predictor variables on the \res{set.nprin} text-embedding principal components  (Table~\ref{tab:overlap}, for all three datasets, using $^{b}$Tjur's $R^2$ for binary variables \cite{tjur2009coefficients}). The  overlap between text data and the other predictors is small to moderate: \synthmismatch{no single predictor shares more than \res{e5.apeq.overlap.factor1-therapeutic} of its variance with the text components}, and most values are below .10. The texts partially tap into information assessed via the questionnaires, such as therapeutic use motives, acceptance- and avoidance-related experiences, the subjective experience of overcoming emotional challenges by substance use, as well as the retrospective appraisal of the experience. Overlap with the other setting dimensions is consistently small. Moreover, the other predictors together explain only about a third of the outcome-relevant information extracted from the texts (text signal, e.g., \res{e5.apeq.who.textsignal.r2} for WHO-5 and \res{e5.ptsd.pcl.textsignal.r2} for PCL-5). However, it is also evident that information encoded in the text data (a) goes far beyond what these questionnaires measure, and (b) this additional information is useful for predicting differences in the outcome variables.  
+ }
+
+
+\begin{table}[!htbp]
+	\caption{Shared variance between the text embeddings and the other predictor variables.}
+	\centering
+	\renewcommand{\baselinestretch}{1}\normalsize
+	\begin{threeparttable}
+		\input{generated/tab_overlap_e5}
+		\begin{tablenotes}[flushleft]
+			\small
+			\item \textit{Note.} Values are the variance in each predictor variable explained by the first \res{set.nprin} principal components of the free-text response indicated in the header (the response with the largest incremental validity in each dataset\change{, in the single cross-validation run}; \change{for this descriptive analysis, the PCA was computed on the whole analysis sample rather than within cross-validation folds}): adjusted $R^2$ from linear regression for continuous variables; $^{b}$Tjur's $R^2$ from logistic regression for binary variables. Binary variables with fewer than \res{set.overlap.minn} participants in either category, categorical variables with more than two levels, and the response language were not considered. $^{t}$Text signal: adjusted $R^2$ of a linear regression of the held-out predictions of the text-only model \change{(single \res{set.folds}-fold cross-validation run)} on all other predictor variables.
+		\end{tablenotes}
+	\end{threeparttable}
+	\label{tab:overlap}
+\end{table}
+
+
+\subsubsection{Qualitative examples.} To provide some qualitative impressions as to what predictive pieces of information the free-text responses capture that the questionnaires missed, we predicted each participant's outcome (\change{held-out}) from the baseline model and from the extended-by-text model. The difference in a participant's residual between the two models is a index for the predictive improvement brought about by the inclusion of text data; the difference in the predicted value for that person shows the ``direction of the effect''. The fifteen responses with the highest improvement are displayed in Table~\ref{tab:examples_APEQ}. Keep in mind that interpretations of such examples are inherently qualitative, subjective, and do not necessarily reflect patterns in the entire dataset (which is exactly why the main analysis avoids human annotation) -- they are intended to serve as illustrations. 
+
+That being said, for differences in well-being (WHO-5), the examples in Table~\ref{tab:examples_APEQ} suggest quite clearly that the best-improving positive shifts are found where the free-text responses describe positive emotions following the substance use: relaxation, intense positive feelings of happiness, symptoms relief in affective disorders,  and general life satisfaction. This pattern is especially interesting given the very low correlation between the text information and the valence \emph{of the acute effects}. On the other hand, the best-improving negative shifts (that is, decreases in the outcome variable)  are found when the free-text responses describe insights and (meta-)cognitive processes, especially evaluations and judgments: increased awareness for oneself and ones own mental states, as well as the (social) environment. So interestingly, the free-text responses associated with positive and negative shifts are not polar opposites on one semantic dimension. 
+
+
+\begin{table}[!htbp]
+\centering
+\caption{The \res{set.examples} responses in the APEQ dataset for which \change{held-out} prediction of change in well-being (WHO-5) improved most when text-embedding predictors were added (\emph{improvement}), alongside the change in the predicted value (\emph{shift}). Negative shift values are displayed in boldface. } 
+\label{tab:examples_APEQ}
+\scriptsize
+\begin{threeparttable}
+\begin{tabular}{p{12cm}rr}
+ \hline
+Response & Improvement & Shift \\
+  \hline
+\input{generated/tab_examples_e5_APEQ_WHO_en}
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\item \textit{Note.} $^{\dagger}$Response originally given in German and translated into English for this table; text embeddings, improvement, and shift values are based on the original German response.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+For differences in psychological flexibility (AAQ-II), the most-improving responses are presented in Table~\ref{tab:examples_APEQ_AAQ}. \change{Note again that positive changes indicate a \emph{decrease} in flexibility, while negative changes indicate an \emph{increase} in flexibility.} The pattern here \change{is thus in line with what we observe for} the WHO-5 prediction: Reports of self-awareness, re-evaluation, and meta-cognition are associated to more positive changes \change{(= decreases)} in psychological flexibility, while reports of content, serenity, and happiness are associated to more negative changes \change{(= increases)}. 
+
+\begin{table}[!htbp]
+\centering
+\caption{The \res{set.examples} responses in the APEQ dataset for which \change{held-out} prediction of change in psychological flexibility (AAQ-II) improved most when text-embedding predictors were added (\emph{improvement}), alongside the change in the predicted value (\emph{shift}). Negative shift values are displayed in boldface. }
+\label{tab:examples_APEQ_AAQ}
+\begingroup\scriptsize
+\begin{threeparttable}
+\begin{tabular}{p{12cm}rr}
+  \hline
+Response & Improvement & Shift \\
+  \hline
+\input{generated/tab_examples_e5_APEQ_AAQ_en}
+   \end{tabular}
+\begin{tablenotes}[flushleft]
+\item \textit{Note.} $^{\dagger}$Response originally given in German and translated into English for this table; text embeddings, improvement, and shift values are based on the original German response.
+\end{tablenotes}
+\end{threeparttable}
+\endgroup
+\end{table}
+
+
+\subsection{GCMQ}
+
+\subsubsection{Quantitative analysis.} {For the well-being in the two weeks prior to data collection (WEMWBS) in the GCMQ data, we obtain a cross-validated $R^2 = \res{e5.gcmq.wemwbs.none.r2}$ for the baseline model (\change{median} $\alpha = \res{e5.gcmq.wemwbs.none.alpha}$, $\lambda = \res{e5.gcmq.wemwbs.none.lambda}$). For the extended-by-text model containing  only the "impact on handling of stressful events"-responses, we obtain \change{practically the same} $R^2 =\res{e5.gcmq.wemwbs.events.r2}$  ($\alpha = \res{e5.gcmq.wemwbs.events.alpha}$, $\lambda = \res{e5.gcmq.wemwbs.events.lambda}$), while for the extended-by-text model containing only the "impact on mental health"-responses, we obtain $R^2 = \res{e5.gcmq.wemwbs.health.r2}$  ($\alpha = \res{e5.gcmq.wemwbs.health.alpha}$, $\lambda = \res{e5.gcmq.wemwbs.health.lambda}$). \change{For} the extended-by-text model containing \emph{both} responses, we also obtain $R^2 = \res{e5.gcmq.wemwbs.events+health.r2}$ (\change{median} $\alpha = \res{e5.gcmq.wemwbs.events+health.alpha}$, $\lambda = \res{e5.gcmq.wemwbs.events+health.lambda}$).}
+
+{Thus, \change{in the pre-specified test of the extended-by-text model containing both responses,} we find a  $\Delta R^2 = \res{e5.gcmq.wemwbs.confirm.delta}$ \change{(95\% CI [\res{e5.gcmq.wemwbs.confirm.cilo}, \res{e5.gcmq.wemwbs.confirm.cihi}], $t(\res{e5.gcmq.wemwbs.confirm.df}) = \res{e5.gcmq.wemwbs.confirm.t}$, \res{e5.gcmq.wemwbs.confirm.p}), which is not reliably different from zero. \synthmismatch{Descriptively, the increase is carried by}} the "impact on mental health"-responses \change{($\Delta R^2 = \res{e5.gcmq.wemwbs.health.delta}$, that is, \res{e5.gcmq.wemwbs.health.deltapct}\% in absolute terms and \res{e5.gcmq.wemwbs.health.relgain}\% in relative terms; 95\% CI [\res{e5.gcmq.wemwbs.health.cilo}, \res{e5.gcmq.wemwbs.health.cihi}], \res{e5.gcmq.wemwbs.health.p}), while the "impact on handling of stressful events"-responses do not add anything ($\Delta R^2 = \res{e5.gcmq.wemwbs.events.delta}$). In the GCMQ data, the free-text responses therefore do not reliably add predictive accuracy.}}
+
+For an elastic net model that \emph{only} takes the $2 \times \res{set.nprin}$ text-embedding principal components as input, we already obtain a cross-validated $R^2 = \res{e5.gcmq.wemwbs.textonly.r2}$. \change{As in the APEQ data, the overlap between the free-text data and the other predictors is small to moderate (Table~\ref{tab:overlap}).}
+
+
+\subsubsection{Qualitative examples.} 
+
+Illustrative examples for the responses that most reduced the residuals are presented in Table~\ref{tab:examples_GCMQ}. This table reports on the model that \emph{only} contains the "mental health"-responses, as only these add predictive accuracy \change{descriptively (see above; the increase is not reliable, so these examples should be read with particular caution)}. \synthmismatch{In a qualitative interpretation, it is striking that strong negative prediction shifts are often associated to responses that describe indifference -- here, it seems that the regression model based on the other predictors otherwise overshoots in its predictions of well-being. Beyond that, other responses associated to strong negative shifts describe (too) short-lived effects, or \change{no impact of the experience (here, the model predictions based on the other predictors appear to otherwise overshoot)}. Strong positive shifts on the other hand are often associated to responses describing euphoria, connectedness and love,  open-mindedness, \change{and newly-found appreciation of life}.}
+
+
+\begingroup\footnotesize
+\begin{longtable}{p{12cm}rr}
+\caption{The \res{set.examples} responses in the GCMQ dataset for which \change{held-out} prediction of well-being (WEMWBS) improved most when text-embedding predictors of the "mental health"-response were added (\emph{improvement}), alongside the change in the predicted value (\emph{shift}). Negative shift values are displayed in boldface.}
+\label{tab:examples_GCMQ}\\
+
+\hline
+
+Response (mental health) & Improvement & Shift \\
+\hline
+\endfirsthead
+
+\hline
+Response (mental health) & Improvement & Shift \\
+\hline
+\endhead
+
+\multicolumn{3}{p{14cm}}{\textit{Note.} $^{\dagger}$Response originally given in German and translated into English for this table; text embeddings, improvement, and shift values are based on the original German response. [...] marks a word missing in the original response.} \\
+\endlastfoot
+
+\input{generated/tab_examples_e5_GCMQ_WEMWBS_en}
+\end{longtable}
+\endgroup
+
+\subsection{PTSD}
+
+\subsubsection{Quantitative analysis.} {For the main outcome PCL (PTSD symptom severity), the cross-validated $R^2$ values of the different elastic net models in the nested hierarchy (baseline models, extended-by-text models, as well as the text-only model) are presented in Table}~\ref{tab:PTSD_quant}. {The text-only model on its own \change{(with information from all three responses)} already achieves a relatively high $R^2 = \res{e5.ptsd.pcl.textonly.r2}$. \change{In the pre-specified test of the extended-by-text model including all three free-text responses, we observe a $\Delta R^2 = \res{e5.ptsd.pcl.confirm.delta}$ from $R^2 = \res{e5.ptsd.pcl.none.r2}$ in the baseline model to $R^2 = \res{e5.ptsd.pcl.confirm.r2}$ (95\% CI [\res{e5.ptsd.pcl.confirm.cilo}, \res{e5.ptsd.pcl.confirm.cihi}], $t(\res{e5.ptsd.pcl.confirm.df}) = \res{e5.ptsd.pcl.confirm.t}$, \res{e5.ptsd.pcl.confirm.p}) -- an absolute increase of \res{e5.ptsd.pcl.confirm.deltapct}\% and a relative increase of \res{e5.ptsd.pcl.confirm.relgain}\%.} In the setup where text data is the most helpful in addition to the other predictors, \change{the extended-by-text model including the \emph{post} and \emph{treat} free-text responses,} we observe a  $\Delta R^2 = \res{e5.ptsd.pcl.best.delta}$ \change{to $R^2 = \res{e5.ptsd.pcl.best.r2}$ (95\% CI [\res{e5.ptsd.pcl.best.cilo}, \res{e5.ptsd.pcl.best.cihi}], \res{e5.ptsd.pcl.best.p}, not corrected for the selection of this model among the seven extended-by-text models).}} \change{As can be seen in Table~\ref{tab:PTSD_quant}, the increase is carried primarily by the ``post'' and secondarily by the ``treat'' responses: The models including only one of them achieve $\Delta R^2 = \res{e5.ptsd.pcl.post.delta}$ (post) and $\Delta R^2 = \res{e5.ptsd.pcl.treat.delta}$ (treat), which are both reliable on their own, while the ``acute'' responses do not add predictive accuracy ($\Delta R^2 = \res{e5.ptsd.pcl.acute.delta}$).}
+
+For the additional outcome PTGI (post-traumatic growth), text data does not add to the variance explained. The baseline model achieves $R^2 = \res{e5.ptsd.ptgi.none.r2}$\change{; the pre-specified extended-by-text model with all three responses reaches $R^2 = \res{e5.ptsd.ptgi.confirm.r2}$ ($\Delta R^2 = \res{e5.ptsd.ptgi.confirm.delta}$, 95\% CI [\res{e5.ptsd.ptgi.confirm.cilo}, \res{e5.ptsd.ptgi.confirm.cihi}], \res{e5.ptsd.ptgi.confirm.p})}\change{. \synthmismatch{In fact, all seven extended-by-text models slightly \emph{decrease} the $R^2$ compared to the baseline model (which is possible with held-out $R^2$); even the best-performing one (using the treat responses only) reaches $R^2 = \res{e5.ptsd.ptgi.best.r2}$ ($\Delta R^2 = \res{e5.ptsd.ptgi.best.delta}$, \res{e5.ptsd.ptgi.best.p}).}} The text-only model only reaches $R^2 = \res{e5.ptsd.ptgi.textonly.r2}$ \change{(in \res{e5.ptsd.ptgi.textonly.nna} of the outer folds, this model shrank all text coefficients to zero and predicted a constant value, so that no $R^2$ could be computed; these folds are not included in the average)}. \change{As in the APEQ and GCMQ data, the overlap between the free-text data and the other predictors is small to moderate (Table~\ref{tab:overlap}).}
+
+
+\begin{table}[!htbp]
+\centering
+\caption{Cross-validated $R^2$ for predicting PCL-5 symptom severity, for the different elastic net models in the hierarchy\change{, from the repeated nested cross-validation. $\Delta R^2$ with 95\% confidence interval and $p$-value of the corrected repeated $k$-fold $t$-test against the baseline model; the pre-specified test is the model with all three responses (+ acute + post + treat), $p$-values of the other models are not corrected for multiple comparisons}. The best-performing model is highlighted in boldface.}
+\label{tab:PTSD_quant}
+\input{generated/tab_models_e5_PTSD_PCL}
+\end{table}
+
+\subsubsection{Qualitative examples.}
+
+Illustrative examples for the responses that most reduced the residuals are presented in Table~\ref{tab:examples_PTSD}. This table reports on the model that \emph{only} contains the "post"-responses, as these are \change{the single response with the largest increase in} $R^2$. In a qualitative interpretation, free-text responses with very positive shift values (i.e., increases in symptom severity) for the most part simply describe (severe) symptoms of mental disorders across the board, and not restricted to PTSD symptoms. It may not be too surprising that this information helps predicting PTSD symptom severity. Free-text responses with very negative shift values (i.e., decreases in symptom severity) \change{mostly state that there were no persistent difficulties, or describe insights about oneself}. 
+
+\begingroup\footnotesize
+\begin{longtable}{p{12cm}rr}
+\caption{The \res{set.examples} responses in the PTSD dataset for which \change{held-out} prediction of PTSD symptom severity (PCL-5) improved most\change{$^{*}$} when text-embedding predictors of the "post"-response were added (\emph{improvement}), alongside the change in the predicted value (\emph{shift}). Negative shift values are displayed in boldface.}
+\label{tab:examples_PTSD}\\
+
+Response (post) & Improvement & Shift \\
+\hline
+\endfirsthead
+
+\hline
+Response (post) & Improvement & Shift \\
+\hline
+\endhead
+
+\multicolumn{3}{l}{\change{\synthmismatch{\textit{Note.} $^{*}$For display purposes (e.g., length), \res{e5.ptsd.pcl.examples.ndropped} responses were replaced by the next \res{e5.ptsd.pcl.examples.ndropped} responses in the ranking.}}} \\
+\multicolumn{3}{p{14cm}}{$^{\dagger}$Response originally given in German and translated into English for this table; text embeddings, improvement, and shift values are based on the original German response.} \\
+\endlastfoot
+
+\input{generated/tab_examples_e5_PTSD_PCL_en}
+\end{longtable}
+\endgroup
+
+
+\section{Discussion}
+
+Free-text responses are \change{frequently} collected in clinical studies, but are often not analyzed systematically and rigorously. In the present study, we investigated  to what extent the information in participant's free-text responses can be harvested with text embedding models to increase the \change{held-out} predictive accuracy for relevant outcome measures above and beyond sizable collections of standard predictors (see Figure~\ref{fig:pipeline}). Specifically, we investigated free-text responses \change{describing experiences associated with psychedelic substance use}, in addition to demographic predictors, setting variables, and series of questionnaire scores.
+
+\subsection{Discussion of current findings}
+
+Across three large datasets \parencite{wolff2022acceptance,wolff2024measuring,evens2026post} with five different outcome measures, the increase in predictive accuracy is sometimes substantial (Table~\ref{tab:results_summary}): \change{\synthmismatch{We find significant increases in predictive accuracy between around 3\% and 10\% for predicting changes in subjective well-being (APEQ WHO-5), changes in psychological flexibility (APEQ AAQ-II) and post-traumatic stress disorder symptom severity (PTSD PCL-5).} As the variances explained range around 30\% to 40\%, these increases matter. However, such result patterns are not ubiquitous: For well-being (GCMQ WEMWBS) and post-traumatic growth (PTSD PTGI), we find no significant increases. \synthmismatch{These results  replicate in a robustness check with a second text embedding model (\emph{bge-m3}; see the Supplementary Material).} As can be seen in Table~\ref{tab:overlap}, overlap between text embeddings and other predictors is generally small to moderate. The free-text responses thus contain  information not captured by the other measurement tools. Qualitative inspections suggest that the most predictive free-text responses contain a broad range of relatively straightforward information: emotional reactions, indifference, meta-cognitive processes, or symptoms of mental disorders. Notably, in our reading the predictive texts mainly convey psychological information on the participant's own cognitive and emotional states, rather than information about the outside world (such as events or settings).  }
+
+Concerning the GCMQ results, it may be initially tempting to attribute the lower $\Delta R^2$ to the much larger number of other predictors considered in the analysis (which stems from the fact that more such predictors are available in the dataset). However, in Table~\ref{tab:results_summary} one can clearly see that the $\Delta R^2$ values in the model comparisons are very much aligned with the $R^2$ values of the text-only models. Sample size is also not the determinant of these findings -- the sample size of the PTSD-PCL-5 data is below half of the GCMQ data, but the $\Delta R^2$ is much higher. And within the PTSD data, $\Delta R^2$ differs substantially between the two different outcomes PCL-5 and PTGI, even though the \change{set of baseline predictors} is identical. This indicates that in cases like the GCMQ data (or the PTSD-PTGI data), the text genuinely carries less information about the outcomes. 
+
+One potential reason for the discrepancy between the APEQ-WHO-5 and the GCMQ(-WEMWBS) results, where both outcome variables are well-being measures, may be the different nature of the free-text responses: In the GCMQ data, participants do not describe the experience itself, but its perceived impact on stress handling and mental health. However, there are also other differences: WEMWBS in the GCMQ data is a state-level variable of current well-being, while WHO-5 in the APEQ data is a retrospective assessment of the difference in well-being before and after the psychedelic experience. Also $R^2$ is generally lower for \emph{all} models in the GCMQ data than in the APEQ data (which may be a consequence of the different types of outcome variables, as \change{most} baseline predictors of the APEQ models are also \change{included} in the GCMQ models\change{, with the exception of duration, mood, preparedness, strength of the effects, and the APEQ-ACE $\times$ APEQ-AVE interaction}).
+
+In the PTSD-PTGI data, the most reasonable conclusion to us is that the free-text responses just do not carry information about posttraumatic growth, \change{in particular because the questions focused on symptoms}. As the question did not ask for posttraumatic growth, and many participants may not have experienced this or may not even be aware of the concept, findings such as these are bound to occur -- as any other variable, free-text responses will not be a universal predictor of every possible outcome. In addition, the concept and its measurement itself have received criticism in the literature \cite{frazier2009does,jayawickreme2021post}, which may lead to difficulties in predicting this variable.
+
+
+\subsection{The role of open-ended free-text responses}
+
+Of course, analyses of free-text responses are and have been performed already \parencite{mayring2014qualitative}, often requiring highly effortful and resource-intensive human annotation \cite{braun2006using,oconnor2020intercoder}. As a direct consequence, there are serious issues with scalability to large datasets\footnote{Even though recent studies are optimistic that LLM agents can be used to automatize text annotation; see \textcite{ziems2024can,gilardi2023chatgpt} }. In contrast, applying techniques from machine learning/NLP is often just a matter of seconds or maybe minutes. Such techniques have been available for some time, for example using word counts \parencite{tausczik2010psychological}, but also vector representation models such as Latent Semantic Analysis or word2vec have already been used to analyze free-text responses also in clinical settings \cite{barattieri2023automated,de2018clinical,kintsch2002potential,elvevaag2007quantifying}. With context-aware text embeddings models, where texts are no longer treated as an unordered \emph{bag of words}, this vector space approach has become far more sophisticated and powerful. Text embeddings do not annotate a set of defined criteria, but instead are general-level quantitative representations of the text and its meaning. This has the disadvantage that these embeddings are not directly interpretable, but the advantage that they encode whatever the participant produced without requiring a top-down filter of search criteria. 
+
+Concerning the disadvantage of initial non-interpretability, this is one that can be addressed. Common approaches cluster analyses on text embeddings that allow researchers to assess common themes and topics \parencite{grootendorst2022bertopic,lalk2024measuring}, or regression-based approaches to predict pre-defined semantic dimensions such as valence from text embeddings \parencite{gatti2024valence}. In the present study, our approach to establish interpretability was to examine the responses that contributed the most to making the predictions more accurate (i.e., decreased residuals the most). As showcased in the Results sections, this reveals valuable information provided by participants, and common themes in their responses.
+
+This ties in to a more general point about free-text responses: In standard questionnaire items  the researcher has to determine which construct they aim to measure (and ideally then evaluate the item), and the item then serves as a ``fishing net'' to catch exactly that construct.  Open-ended free-text responses function fundamentally different \change{as they are inherently personalized}: Depending on how open the questions are worded, participants are completely free to produce whatever \emph{they themselves} deem relevant or informative. The selection is thus passed from researcher to participant. In the words of \textcite{schwartz2013personality}, ``the data itself drives a comprehensive exploration of language that distinguishes people, finding connections that are not captured with traditional closed-vocabulary word-category analyses'' (see also \cite{boyd2021natural}).
+
+
+This opens up a very simple opportunity to catch information we might otherwise have missed, because (to stay in the metaphor), the meshes of the fishing net were too large, or the net was in a wrong place entirely. We do not want to claim that no questionnaire items \emph{can} be developed to catch this information -- this possibility surely exists (the net can be changed or moved). In our qualitative examinations of what responses increase predictive accuracy, the relevant dimensions appear to be rather obvious, for example describing evaluations, meta-cognitive processes, or symptoms of mental disorders. Still, even though seemingly similar items existed in the questionnaires (for example, about the valence and retrospective appraisal of the psychedelic experience), these apparently did not capture the relevant information. This demonstrates that open-ended free-text responses can always function as a convenient back-up to capture information that could otherwise be missed. This is especially relevant in data collection scenarios where one cannot or does not want to let the participants fill in questionnaires for hours. As argued by \parencite{kjell2022natural,Kjell2019}, participants also often perceive the free-text response format as more natural than standard questionnaire items which force them to translate some subjective experience into a single number. \change{Open-ended questions with free-text responses may also address issues with suggestive questions in research surveys. In research on psychedelic experiences, there is currently a debate that standard questionnaire items can push participants to focus on specific dimensions of their experience and reinforce stereotypical perspectives, which can bias the data \parencite{vanderijst2026redefining}. Open-ended questions can be formulated very generically (``Describe your psychedelic experience''), so that such biases can be largely avoided.}
+
+\change{The very points discussed so far also come with limitations:} Since participants choose what responses they provide and what type of information they present in their responses, there is very little researcher control. For instance, even a single participant response will likely often not focus on a single construct or concept, but touch on different, possibly only loosely related or unrelated concepts. The same will likely apply for responses collected from different participants, who may choose to focus on entirely different aspects of a topic or even entirely different topics. Depending on the research question and objective, this may introduce unacceptable noise to the study. Additionally, open-ended response by their nature often prevent the researcher from cleanly pre-defining the construct or concept they are supposed to measure. This makes them a risky or often unusable choice for confirmatory hypothesis-testing, where a specific relation between specific variables is at the center of the research question.  
+
+
+\subsection{Practical recommendation}
+
+Based on our study, our practical recommendation is to include at least one open-ended question with a free-text response format into any questionnaire. Even if it just ``Is there anything else you want to tell us?'' with an obligatory response field that requires a minimal amount of characters, there may always be useful information that would otherwise be missed. Text embeddings -- from open, locally-run models to ensure data protection -- make it very convenient to analyze such responses, so researchers do not have to worry about time- and resource-intensive annotation steps. The analysis pipeline presented in the present article can serve as a template for this (see also \cite{kjell2023text,debelak2025embeddings}). \change{Similar methods can, and have been, applied for clinical diagnoses -- for example, researchers have used patients' free-text data from interviews of spontaneous speech as the input for classifiers trained to perform clinical diagnoses \parencite{agbavor2022predicting,chen2025detecting,chen2026depression}. }
+
+
+Of course, if more specific questions are included -- such as the questions to describe the psychedelic experiences in our current study -- this can only add more information. Depending on the research question and the data collection setting, this introduces a tradeoff question between time and resources invested and informative data points collected. As the human communicative system has developed under evolutionary pressure to efficiently convey rich information \parencite{gibson2019efficiency}, we suspect that this tradeoff may often play out in favor of open-ended free-text responses.
+
+
+\section{AI usage statement}
+
+The first version of the analysis pipeline was implemented manually in R. AI tools (Claude Code; Sonnet and Opus, versions 5 and 5.5) were used on toy data to streamline and better structure the scripts, to adapt the script for all datasets and outcome variables, \change{to create a structured and reproducible repository that flows into a reproducible \LaTeX document,} and for literature search. No AI tools were used for writing the first complete version of the manuscript text; \change{AI tools were then used to implement selected changes to the methods and analysis after internal revisions, and draft the corresponding suggestions for changes to Methods and Results}. \change{All AI-suggested modifications were manually reviewed and validated by the first author.}
+
+    \printbibliography
+
+
+\newpage
+
+\section{Supplementary Material: Hyperparameter sweep and bge-m3 model}
+
+Figure~\ref{fig:sweeps-e5} presents the cross-validated $R^2$ for all elastic net models reported in the main paper for different numbers of PCA components of the \emph{multilingual-e5-large} embeddings that are entered as predictors. \change{These results are based on a single (non-repeated, non-nested) \res{set.folds}-fold cross-validation run, as repeating the nested cross-validation for every number of components would have been computationally prohibitive. As the hyperparameters are selected on the same folds that are used for evaluation here, these $R^2$ values tend to be optimistic compared to the nested results in the main text \synthmismatch{(hardly in the APEQ data, but more clearly in the GCMQ data and especially in the comparatively small PTSD dataset)}; the informative part is therefore the comparison \emph{across} numbers of components. \synthmismatch{In the APEQ and GCMQ data, $R^2$ increases steeply up to about 10--15 components and remains largely stable up to about 40 components before slowly decreasing;} the \res{set.nprin} components used in the main analysis lie within this stable range. For PCL-5 in the PTSD data, the pattern is similar but noisier. For PTGI, no number of components leads to an increase over the baseline model.} Figure~\ref{fig:sweeps-bge} presents the same information for the \emph{bge-m3} embeddings, where we find \synthmismatch{\change{comparable results, with one exception: for PCL-5, $R^2$ continues to increase up to 40--60 components, so that the main analysis with \res{set.nprin} components is, if anything, conservative here (although the gains at larger numbers of components, estimated on fewer than 210 training participants, are particularly prone to the optimism described above)}}. These results for the \emph{bge-m3} analysis are summarized in Table~\ref{tab:results_summary_bge}, in the same format as Table~\ref{tab:results_summary} for the main  \emph{multilingual-e5-large} analysis.
+
+
+\begin{table}[!htbp]
+\small\renewcommand{\arraystretch}{0.9}%
+
+    \caption{Overview of the datasets and main results for all outcome variables considered here, using \textbf{bge-m3} text embeddings. \change{$R^2$ values are cross-validated (held-out) $R^2$ from the repeated nested cross-validation, with \res{set.nprin} PCA components per free-text response. The baseline + text model contains all free-text responses of the dataset (the pre-specified test); $\Delta R^2$ is tested with the corrected repeated $k$-fold $t$-test.}}
+
+    \centering
+    \input{generated/tab_summary_bge}
+
+    \label{tab:results_summary_bge}
+\end{table}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{generated/fig_sweeps_e5.pdf}
+  \caption{Cross-validated $R^2$ against the number of retained PCA components, for each dataset and outcome\change{ (single \res{set.folds}-fold cross-validation run)}. Text embeddings: multilingual-e5-large.}
+  \label{fig:sweeps-e5}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{generated/fig_sweeps_bge.pdf}
+  \caption{Cross-validated $R^2$ against the number of retained PCA components, for each dataset and outcome\change{ (single \res{set.folds}-fold cross-validation run)}. Text embeddings: bge-m3.}
+  \label{fig:sweeps-bge}
+\end{figure}
+    
+\end{document}

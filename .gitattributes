@@ -1,0 +1,2 @@
+# keep the synthetic raw files byte-identical to what synthetic/generate.R writes
+data/raw/* -text

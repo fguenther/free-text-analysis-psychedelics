@@ -1,0 +1,81 @@
+id,language,text,pos_affect,insight,acceptance,challenging,mystical,sensory,social,therapeutic,setting
+apeq_0401,eng,"Peace of mind for the first time in years",3,0,0,0,0,0,0,0,0
+apeq_0402,eng,"I think more about how I come across to others",0,2,0,0,0,0,1,0,0
+apeq_0403,ger,"Ich bin dankbarer für Kleinigkeiten im Alltag.",2,0,0,0,0,0,0,0,0
+apeq_0404,eng,"less anxious, more open with my family",2,0,0,0,0,0,2,0,0
+apeq_0405,ger,"Es war ein Wendepunkt, danach habe ich mit dem Rauchen aufgehört.",1,0,0,0,0,0,0,1,0
+apeq_0406,eng,"Felt a deep connection to my ancestors and the land",0,0,0,0,3,0,1,0,0
+apeq_0407,eng,"I noticed how I always need to be busy to avoid feeling. Sitting still was torture at first.",0,3,0,1,0,0,0,0,0
+apeq_0408,ger,"Gute Laune für mehrere Wochen",3,0,0,0,0,0,0,0,0
+apeq_0409,eng,"It was scary but I learned a lot about my fears",0,2,0,2,0,0,0,0,0
+apeq_0410,ger,"Ich habe meine Prioritäten neu sortiert: Familie zuerst, dann Arbeit.",0,2,0,0,0,0,2,0,0
+apeq_0411,eng,"I found the strength to leave an abusive relationship",2,1,0,0,0,0,2,0,0
+apeq_0412,ger,"Ein Gefühl von tiefem Frieden und Glück, das lange anhielt",3,0,0,0,1,0,0,0,0
+apeq_0413,eng,"Made me realise how much I neglected my friends",0,3,0,0,0,0,2,0,0
+apeq_0414,eng,"It reduced the noise in my head. I feel calmer and happier.",3,0,0,0,0,0,0,0,0
+apeq_0415,ger,"Kein großer Effekt auf mein Leben",0,0,0,0,0,0,0,0,0
+apeq_0416,eng,"My view on death changed completely, I'm not afraid anymore",1,0,3,0,1,0,0,0,0
+apeq_0417,ger,"Ich habe über meine Werte nachgedacht und gemerkt, dass ich nicht danach lebe.",0,3,0,0,0,0,0,0,0
+apeq_0418,eng,"Lots of laughter and colours",1,0,0,0,0,3,0,0,0
+apeq_0419,ger,"Seitdem bin ich offener für Neues und gehe mehr Risiken ein. Ich habe zum Beispiel alleine eine Reise nach Südamerika gemacht.",2,0,0,0,0,0,0,0,0
+apeq_0420,eng,"Helped me come to terms with my diagnosis (MS). I'm at peace with it now.",2,0,3,0,0,0,0,1,0
+apeq_0421,eng,"I'm more mindful of how I speak to my children and how my words land",0,3,0,0,0,0,2,0,0
+apeq_0422,ger,"Gefühl der Verbundenheit mit allem Lebendigen",0,0,0,0,3,0,1,0,0
+apeq_0423,eng,"It made me happy. Like, really happy, for no reason at all, for days.",3,0,0,0,0,0,0,0,0
+apeq_0424,ger,"Ich war schon immer sehr selbstkritisch, aber nach der Erfahrung habe ich angefangen zu verstehen, woher das kommt. Ich beobachte mich mehr und hinterfrage meine Gedanken.",0,3,0,0,0,0,0,0,0
+apeq_0425,eng,"Life is good",2,0,0,0,0,0,0,0,0
+apeq_0426,eng,"First time in a long while that I felt truly relaxed. My whole body let go of tension I didn't know I had.",3,0,1,0,0,1,0,0,0
+apeq_0427,ger,"Ich habe mehr Respekt vor der Natur und vor Tieren.",0,1,0,0,1,0,0,0,0
+apeq_0428,eng,"It helped me quit my antidepressants with my doctor's help, and I feel better off them",2,0,0,0,0,0,0,2,0
+apeq_0429,ger,"Verbesserte Stimmung, weniger depressive Gedanken, mehr Antrieb und Lebensfreude im Alltag.",3,0,0,0,0,0,0,1,0
+apeq_0430,eng,"Became aware that my anxiety is linked to my perfectionism. Both come from wanting to be in control.",0,3,0,0,0,0,0,0,0
+apeq_0431,ger,"Ich habe das Gefühl, dass ich mich selbst besser kenne. Ich weiß jetzt, was mir gut tut und was nicht, und kann meine Grenzen besser einschätzen.",0,3,0,0,0,0,0,0,0
+apeq_0432,eng,"I don't fear being alone anymore, I actually enjoy my own company now",2,0,1,0,0,0,0,0,0
+apeq_0433,ger,"Bewusstseinserweiterung",0,1,0,0,2,0,0,0,0
+apeq_0434,eng,"I felt like a child again, curious and playful. Everything was new.",2,0,0,0,0,2,0,0,0
+apeq_0435,eng,"Getting off my phone more and being present with people around me",1,1,0,0,0,0,2,0,0
+apeq_0436,ger,"Ich habe danach mehrere Wochen lang schlecht geschlafen und mich unwohl gefühlt.",0,0,0,3,0,0,0,0,0
+apeq_0437,eng,"Gratitude for my life and the people in it. Every day.",3,0,0,0,0,0,1,0,0
+apeq_0438,ger,"Ich sehe viele Dinge entspannter und lasse mich nicht mehr so schnell stressen. Auch meine Beziehung zu meinen Eltern hat sich verbessert.",2,0,1,0,0,0,2,0,0
+apeq_0439,eng,"The trip was intense, I saw my own death and accepted it",0,0,2,2,2,0,0,0,0
+apeq_0440,ger,"Mehr Selbstreflexion, manchmal zu viel",0,3,0,1,0,0,0,0,0
+apeq_0441,eng,"I started to understand my emotions instead of just reacting to them. Like, I notice when I get jealous and I can ask myself why, instead of picking a fight with my boyfriend.",0,3,0,0,0,0,1,0,0
+apeq_0442,ger,"Ich habe die Erfahrung in Amsterdam mit Trüffeln gemacht, mit meinem Freund. Es war ein schöner Tag im Park, wir haben viel gelacht und die Enten beobachtet.",1,0,0,0,0,2,1,0,3
+apeq_0443,eng,"Greater sense of purpose and meaning",2,1,0,0,1,0,0,0,0
+apeq_0444,ger,"Ich habe meine Schüchternheit überwunden",2,0,0,0,0,0,1,0,0
+apeq_0445,eng,"Dont know, too much happened to put in words",0,0,0,1,1,0,0,0,0
+apeq_0446,ger,"Seit der Erfahrung bin ich viel liebevoller zu mir selbst, und meine Essstörung hat sich deutlich gebessert. Ich kann wieder normal essen und fühle mich wohl.",3,0,1,0,0,0,0,2,0
+apeq_0447,eng,"made me reflect on the choices I've made and how I treat people",0,3,0,0,0,0,1,0,0
+apeq_0448,eng,"Joy, gratitude, connection. And a lot of hugging.",3,0,0,0,0,0,2,0,0
+apeq_0449,ger,"Ich habe mich zum ersten Mal wirklich geliebt gefühlt.",3,0,0,0,0,0,1,0,0
+apeq_0450,eng,"It was a hard trip. I saw how unhappy I am with myself and my life. Everything I had been pushing away came up. I felt that I'd been lying to myself about being fine. Since then I've been really questioning things and it's not been easy.",0,3,0,2,0,0,0,0,0
+apeq_0451,ger,"Mein Stresslevel ist deutlich gesunken",3,0,0,0,0,0,0,0,0
+apeq_0452,eng,"I learned to let things be",0,0,3,0,0,0,0,0,0
+apeq_0453,ger,"Ich habe gemerkt, wie sehr ich mich in Gruppen anpasse und meine Meinung zurückhalte. Das fällt mir jetzt ständig auf.",0,3,0,0,0,0,2,0,0
+apeq_0454,eng,"a profound sense that everything is ok and that i'm ok",2,0,2,0,1,0,0,0,0
+apeq_0455,eng,"I don't get angry so fast at my coworkers anymore. More patience.",2,0,0,0,0,0,2,0,0
+apeq_0456,ger,"Ich habe wieder Lust aufs Leben bekommen",3,0,0,0,0,0,0,0,0
+apeq_0457,eng,"I felt the presence of something divine, a loving intelligence behind everything",1,0,0,0,3,0,0,0,0
+apeq_0458,ger,"Es war ein sehr schwieriger Trip mit Paranoia. Ich dachte, meine Freunde wollen mir schaden. Heute weiß ich, dass ich nicht in der richtigen Verfassung war.",0,1,0,3,0,0,1,0,0
+apeq_0459,eng,"I feel more at ease with myself and others. Like I can breathe again.",3,0,1,0,0,0,1,0,0
+apeq_0460,ger,"Mir ist klar geworden, dass ich meine Arbeit hasse",0,3,0,0,0,0,0,0,0
+apeq_0461,eng,"More emotionally available to my partner, we're closer than ever.",1,0,0,0,0,0,3,0,0
+apeq_0462,ger,"Ich nehme meine Gedanken nicht mehr so ernst und kann mich leichter davon lösen.",1,2,2,0,0,0,0,0,0
+apeq_0463,eng,"I saw my whole family history like a tree, how patterns of violence and silence passed down from my grandfather to my father to me. I realised I'm the one who can stop it. It made me look very critically at how I treat my own kids.",0,3,0,0,1,1,2,0,0
+apeq_0464,ger,"Habe mich danach super gefühlt, voller Energie",3,0,0,0,0,0,0,0,0
+apeq_0465,eng,"Taught me that I can survive my own mind",1,1,2,1,0,0,0,0,0
+apeq_0466,ger,"Ich habe gelernt, auch negative Gefühle zuzulassen.",0,1,3,0,0,0,0,0,0
+apeq_0467,eng,"Mushrooms 3g, alone, at night, in my apartment. Too much. Spent hours lying on the floor in fear.",0,0,0,3,0,0,0,0,3
+apeq_0468,ger,"Ich bin insgesamt glücklicher und zufriedener mit meinem Leben.",3,0,0,0,0,0,0,0,0
+apeq_0469,eng,"I can now see my thoughts and emotions from a meta level. It changed how I deal with stress at work, I notice when my mind starts racing and I can name what is going on.",0,3,1,0,0,0,0,0,0
+apeq_0470,ger,"Ich habe tiefe Liebe für meine Familie empfunden",2,0,0,0,0,0,3,0,0
+apeq_0471,eng,"I was more relaxed and joyful for about 3 months, then it faded",2,0,0,0,0,0,0,0,0
+apeq_0472,ger,"Ich bin seitdem nachdenklicher. Ich frage mich häufiger, ob meine Reaktionen angemessen sind, und beobachte, wie andere auf mich reagieren. Ich sehe auch die Schwächen meines Umfelds deutlicher.",0,3,0,0,0,0,2,0,0
+apeq_0473,eng,"Calmness",2,0,0,0,0,0,0,0,0
+apeq_0474,eng,"I became more open and honest about my mental health struggles, which led me to seek therapy. I'm doing a lot better now.",2,1,0,0,0,0,1,2,0
+apeq_0475,ger,"Ich habe in der Erfahrung gesehen, dass ich mein Leben lang vor meinem Schmerz weggelaufen bin. Als ich mich ihm gestellt habe, war er gar nicht so schlimm. Das gibt mir bis heute Mut.",1,1,3,1,0,0,0,0,0
+apeq_0476,eng,"Pure bliss for 6 hours",3,0,0,0,1,1,0,0,0
+apeq_0477,ger,"Keine Veränderung bemerkt",0,0,0,0,0,0,0,0,0
+apeq_0478,eng,"I found myself again after years of feeling lost. I'm happier and know what I want.",3,1,0,0,0,0,0,0,0
+apeq_0479,ger,"Die Erfahrung hat mir geholfen, meine Traumata zu verarbeiten, die ich in der Therapie lange nicht greifen konnte. Ich fühle mich stabiler und sicherer.",2,0,1,0,0,0,0,3,0
+apeq_0480,eng,"I was at a friend's birthday and someone gave me a tab. I didn't know what to expect and at first it was super fun, I danced and everything looked amazing. Then I started overthinking about whether people were judging me, and I hid in the bathroom for an hour. A friend came and talked me down. After that it was okay again. Long term I'd say I learned to be more careful and that I care too much about what people think of me, which I'm working on, and I also learned who my real friends are. I don't regret it, but next time I'd prepare properly and choose the people more carefully.",0,2,0,2,0,2,2,0,2

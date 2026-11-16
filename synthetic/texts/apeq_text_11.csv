@@ -1,0 +1,81 @@
+id,language,text,pos_affect,insight,acceptance,challenging,mystical,sensory,social,therapeutic,setting
+apeq_0801,eng,"Made me less afraid of being vulnerable with people",1,0,1,0,0,0,2,0,0
+apeq_0802,ger,"Mehr Zuversicht und weniger Sorgen um die Zukunft",2,0,1,0,0,0,0,0,0
+apeq_0803,eng,"I'm way more in tune with what I need day to day",1,2,0,0,0,0,0,0,0
+apeq_0804,ger,"Ich habe die Schönheit der Welt wieder gesehen",2,0,0,0,1,1,0,0,0
+apeq_0805,eng,"Showed me I was in the wrong relationship",0,3,0,0,0,0,2,0,0
+apeq_0806,ger,"Ich bin gelassener, wenn etwas nicht nach Plan läuft",2,0,2,0,0,0,0,0,0
+apeq_0807,eng,"I feel like I can handle whatever life throws at me now. That confidence has made me a lot happier and less stressed.",3,0,1,0,0,0,0,0,0
+apeq_0808,ger,"Ich habe in der Erfahrung gesehen, dass ich seit Jahren eine Maske trage, um stark zu wirken. Das zu erkennen war hart, aber notwendig.",0,3,0,1,0,0,1,0,0
+apeq_0809,eng,"I gained a lot of compassion for my younger self and for my parents, who were doing their best with what they had.",1,1,2,0,0,0,2,0,0
+apeq_0810,ger,"Durch das Erlebnis bin ich bewusster mit meiner Zeit umgegangen und habe angefangen, Dinge zu tun, die mir Freude machen.",2,1,0,0,0,0,0,0,0
+apeq_0811,eng,"I was very scared at first because I felt my body dissolving, but when I let go it became the most peaceful moment of my life.",1,0,2,2,3,0,0,0,0
+apeq_0812,ger,"Ich habe danach gemerkt, wie unzufrieden ich mit meinem Studium bin, und habe angefangen, mir ernsthaft Gedanken über einen Wechsel zu machen.",0,3,0,0,0,0,0,0,0
+apeq_0813,eng,"My mood swings have become much less intense. I feel steadier and more content day to day, and I'm enjoying my work again.",3,0,0,0,0,0,0,0,0
+apeq_0814,ger,"Es war ein sehr spirituelles Erlebnis, ich hatte das Gefühl, Gott zu begegnen. Seitdem bete ich wieder und fühle mich geborgen.",2,0,0,0,3,0,0,0,0
+apeq_0815,eng,"It made me notice how much I interrupt people and how little I actually listen. I'm working on it, it's embarrassing.",0,3,0,0,0,0,2,0,0
+apeq_0816,ger,"Ich bin weniger ängstlich und traue mich mehr, Neues auszuprobieren. Zum Beispiel habe ich einen Tanzkurs angefangen.",2,0,0,0,0,0,1,0,0
+apeq_0817,eng,"After the ceremony I felt clean inside, like a lot of old pain had been washed away. I've felt lighter and happier since.",3,0,1,0,1,0,0,1,1
+apeq_0818,ger,"Ich habe erkannt, wie sehr ich meine Mutter idealisiert habe und wie viel Schmerz sie mir eigentlich zugefügt hat.",0,3,0,1,0,0,2,0,0
+apeq_0819,eng,"I learned to listen to my body. When I'm tired I rest now, instead of pushing through and burning out.",1,2,1,0,0,0,0,0,0
+apeq_0820,ger,"Ich bin dadurch toleranter gegenüber meinen eigenen Fehlern geworden und kann mich besser so annehmen, wie ich bin.",1,0,3,0,0,0,0,0,0
+apeq_0821,eng,"I saw that a lot of my depression came from loneliness and from not living according to my values. That realization was hard to sit with.",0,3,0,1,0,0,1,0,0
+apeq_0822,ger,"Ich habe mich zum ersten Mal seit Langem richtig entspannt und war mit mir im Reinen. Die Wochen danach war ich sehr ausgeglichen.",3,0,1,0,0,0,0,0,0
+apeq_0823,eng,"It helped me to recognise my own toxic behaviours in friendships, like always making it about me. I'm trying to change.",0,3,0,0,0,0,2,0,0
+apeq_0824,ger,"Die Erfahrung hat mir geholfen, nach dem Tod meines Hundes wieder Freude zu empfinden.",2,0,1,0,0,0,0,0,0
+apeq_0825,eng,"I felt very alone and frightened during the trip, and afterwards I had some trouble sleeping. It took a couple of weeks to feel normal again.",0,0,0,3,0,0,0,0,0
+apeq_0826,ger,"Ich bin viel sanfter mit mir selbst, wenn ich Fehler mache, und rede nicht mehr so hart mit mir.",1,1,2,0,0,0,0,0,0
+apeq_0827,eng,"It gave me a sense of meaning and direction. I know that I want to work with people and help them.",2,1,0,0,0,0,1,0,0
+apeq_0828,ger,"Ich habe meine Wut auf meinen Vater erkannt und angefangen, sie in der Therapie zu bearbeiten.",0,3,0,0,0,0,1,2,0
+apeq_0829,eng,"I've become much more aware of my privilege as a white man and of the ways I've been ignorant of other people's struggles.",0,3,0,0,0,0,1,0,0
+apeq_0830,ger,"Ich habe mich in der Erfahrung mit allen Lebewesen verbunden gefühlt und esse seitdem kein Fleisch mehr.",0,0,0,0,3,0,0,0,0
+apeq_0831,eng,"The experience showed me how to be gentle with myself. My inner critic is quieter and I feel more at peace.",2,0,2,0,0,0,0,0,0
+apeq_0832,ger,"Ich habe gemerkt, dass ich mich in meiner Freizeit nur noch ablenke, statt Dinge zu tun, die mir wirklich etwas bedeuten.",0,3,0,0,0,0,0,0,0
+apeq_0833,eng,"I'm happier in my relationship. We communicate better and I feel more loved and secure.",3,0,0,0,0,0,3,0,0
+apeq_0834,ger,"Mehr Selbstbewusstsein im Beruf, ich habe mich endlich getraut, eine Gehaltserhöhung zu fordern.",2,0,0,0,0,0,0,0,0
+apeq_0835,eng,"It made me reflect on how I parent. I saw that I'm repeating my dad's coldness, and I'm working on being warmer with my son.",0,3,0,0,0,0,2,0,0
+apeq_0836,ger,"Ich habe Frieden mit meiner Vergangenheit geschlossen und kann jetzt nach vorne schauen.",2,0,3,0,0,0,0,0,0
+apeq_0837,eng,"The experience was overwhelming but beautiful. I felt more alive than ever before, and that aliveness has stayed with me.",3,0,0,1,1,0,0,0,0
+apeq_0838,ger,"Ich bin seit der Erfahrung sehr nachdenklich, was meine Lebensweise und meine Ziele angeht, und stelle vieles in Frage.",0,3,0,0,0,0,0,0,0
+apeq_0839,eng,"i don't think about killing myself anymore. that's the biggest thing. i actually want to live.",3,0,0,0,0,0,0,1,0
+apeq_0840,ger,"Ich habe meine Liebe zur Natur wiederentdeckt und gehe jetzt jedes Wochenende in die Berge. Das macht mich sehr glücklich.",3,0,0,0,1,0,0,0,0
+apeq_0841,eng,"I understood how much I've been hiding from my feelings with alcohol. I'm sober 6 months now and feel so much better.",2,2,0,0,0,0,0,2,0
+apeq_0842,ger,"Das Erlebnis war schwer, ich habe viel geweint und mich zeitweise sehr allein gefühlt. Danach war ich aber erleichtert.",1,0,1,2,0,0,0,0,0
+apeq_0843,eng,"It made me realise I've been very unfair to my partner, expecting him to fix my moods. We're talking about it.",0,3,0,0,0,0,2,0,0
+apeq_0844,ger,"Ich bin ruhiger geworden und habe mehr Freude an den einfachen Dingen. Ein guter Kaffee, ein Spaziergang, Vogelgezwitscher.",3,0,0,0,0,1,0,0,0
+apeq_0845,eng,"It was a breakthrough for my OCD. The rituals feel less urgent and I can resist them more often. I'm so relieved.",2,0,1,0,0,0,0,2,0
+apeq_0846,eng,"The trip made me take a long hard look at how I behave when I'm drunk. I didn't like what I saw.",0,3,0,1,0,0,1,0,0
+apeq_0847,ger,"Ich habe danach angefangen zu malen. Es macht mich glücklich und gibt mir eine Möglichkeit, meine Gefühle auszudrücken.",3,0,0,0,0,0,0,0,0
+apeq_0848,eng,"I felt connected to the whole of humanity, like we are all one big family. That feeling has made me friendlier and more open.",1,0,0,0,3,0,2,0,0
+apeq_0849,ger,"Ich habe erkannt, dass ich mein Leben bisher sehr stark nach Sicherheit ausgerichtet habe und dabei viel verpasst habe.",0,3,0,0,0,0,0,0,0
+apeq_0850,eng,"My anxiety is down, I'm calmer and I don't need my sleeping pills anymore. That alone was worth it.",3,0,0,0,0,0,0,1,0
+apeq_0851,ger,"Ich habe meine Beziehung zu meinem Körper verbessert und esse wieder gerne, ohne Schuldgefühle.",2,0,1,0,0,0,0,1,0
+apeq_0852,eng,"It made me question my identity, my gender and my sexuality. I'm still figuring things out and I spend a lot of time analysing myself.",0,3,0,1,0,0,0,0,0
+apeq_0853,ger,"Ich fühle mich seitdem viel ausgeglichener, auch in stressigen Zeiten, und bin weniger schnell gereizt. Meine Kinder merken das.",3,0,0,0,0,0,1,0,0
+apeq_0854,eng,"I felt like I had been asleep my whole life and the trip woke me up. Since then I see everything more clearly, including the parts of my life I don't like. My job, my habits, some friendships. I'm changing things one by one.",0,3,0,0,1,0,1,0,0
+apeq_0855,ger,"Ich hatte nach der Erfahrung viel mehr Lust auf Menschen und habe neue Freunde gefunden. Ich fühle mich nicht mehr so isoliert und bin insgesamt viel glücklicher.",3,0,0,0,0,0,3,0,0
+apeq_0856,eng,"I had a bad trip after taking too much at a party, with paranoia and the feeling that everyone was laughing at me. For a few weeks after I felt anxious in groups.",0,0,0,3,0,0,1,0,1
+apeq_0857,ger,"Ich habe danach einen anderen Blick auf meine Arbeit bekommen. Ich sehe jetzt, wie toxisch das Klima in meinem Team ist und wie sehr ich mich daran angepasst habe. Ich überlege, zu kündigen.",0,3,0,0,0,0,2,0,0
+apeq_0858,eng,"It made me feel at home in my body for the first time since my accident. I'm happier and more relaxed now.",3,0,1,0,0,1,0,0,0
+apeq_0859,ger,"Ich habe gelernt, meine Gedanken zu beobachten, statt mich in ihnen zu verlieren. Besonders abends vor dem Einschlafen hilft mir das sehr.",1,2,1,0,0,0,0,0,0
+apeq_0860,eng,"Since the experience I've been noticing how often I put myself down in front of others, making jokes at my own expense. I see that it's a way to protect myself before anyone else can criticise me. I'm trying to stop but it's automatic.",0,3,0,0,0,0,1,0,0
+apeq_0861,ger,"Ich habe einen großen Teil meiner Ängste verloren, vor allem die Angst vor Krankheiten. Ich fühle mich frei und genieße mein Leben.",3,0,1,0,0,0,0,0,0
+apeq_0862,eng,"It was a very healing experience. I took it with the intention to work through my grief after a miscarriage. I felt the baby's presence and was able to say goodbye. I'm still sad sometimes, but there's peace now.",1,0,3,0,2,0,0,3,0
+apeq_0863,ger,"Ich habe viel über Achtsamkeit gelernt und meditiere jetzt täglich. Mir geht es seitdem besser.",2,0,0,0,0,0,0,0,0
+apeq_0864,eng,"My trip was a total mess. I took a high dose of LSD at home alone without any preparation, and after an hour I couldn't remember who I was. I spent hours in pure terror, convinced I had broken my brain and would stay like this forever. I called a friend who came over and stayed with me until morning. For the next month I was anxious, I felt detached from myself and had trouble concentrating at work. It got better slowly. Now I see it as a lesson, and I'm much more respectful and careful with these substances, but I wouldn't say it had any positive effect on my life.",0,1,0,3,1,0,1,0,2
+apeq_0865,ger,"Ich habe damals in einer schweren Lebenskrise gesteckt, nach einer Trennung und dem Verlust meines Jobs. Ein Freund hat mir angeboten, mich bei einer Pilzerfahrung zu begleiten. Wir waren in seinem Garten, es war Sommer. Ich habe stundenlang geweint, aber es war ein befreiendes Weinen. Ich habe gespürt, dass mein Leben weitergeht und dass ich nicht allein bin. Danach habe ich langsam wieder Fuß gefasst, mir einen neuen Job gesucht und neue Freundschaften geschlossen. Ich bin heute zufriedener als vor der Krise, und ich denke, die Erfahrung war ein wichtiger Wendepunkt für mich. Ich bin meinem Freund unendlich dankbar.",3,0,2,1,0,0,2,1,2
+apeq_0866,eng,"I had my experience in a clinical trial for treatment-resistant depression. Two sessions with psilocybin in a hospital room set up like a living room, with two therapists, eye shades and music. In the first session I mostly saw images of my childhood, sometimes painful. The second session was more about love, I felt so much love for my kids and for myself. After the trial I felt better than I had in 10 years. I'm still on a lower dose of my medication but my mood is so much better, I enjoy my days and my family says I'm back.",3,0,0,1,0,1,2,3,3
+apeq_0867,ger,"Ich habe in der Erfahrung zum ersten Mal klar gesehen, wie sehr meine Beziehungsmuster von meiner Kindheit geprägt sind. Meine Eltern haben sich ständig gestritten, und ich habe gelernt, mich unsichtbar zu machen. Genau das mache ich bis heute in meinen Beziehungen, ich ziehe mich zurück, sobald es schwierig wird. Seit der Erfahrung beobachte ich das bei mir sehr genau, und ich sehe es auch bei meinen Freunden und Kollegen, wie wir alle unsere alten Muster wiederholen. Das ist manchmal deprimierend, aber auch spannend.",0,3,0,1,0,0,2,0,0
+apeq_0868,eng,"Since the experience, I've been less anxious and more grounded",2,0,0,0,0,0,0,0,0
+apeq_0869,ger,"Ich habe in der Erfahrung meinen Opa gesehen, der vor 3 Jahren gestorben ist. Er hat gelächelt. Seitdem bin ich nicht mehr so traurig.",2,0,1,0,2,0,1,0,0
+apeq_0870,eng,"I realized during the trip that I've been depressed for years without admitting it. That opened a lot of questions.",0,3,0,1,0,0,0,0,0
+apeq_0871,ger,"Ich habe das Leben als Geschenk erkannt und bin jetzt viel dankbarer und fröhlicher, auch an schlechten Tagen.",3,0,1,0,1,0,0,0,0
+apeq_0872,eng,"It made me much more aware of my addiction to my phone and to approval online. I deleted Instagram afterwards.",0,3,0,0,0,0,0,0,0
+apeq_0873,ger,"Durch die Erfahrung habe ich erkannt, wie viel ich von anderen erwarte und wie oft ich enttäuscht bin, weil ich meine Erwartungen nicht ausspreche.",0,3,0,0,0,0,2,0,0
+apeq_0874,eng,"I lost my fear of public speaking, which had been holding back my career for years. I feel more confident and happier at work.",3,0,0,0,0,0,0,0,0
+apeq_0875,ger,"Ich habe Ayahuasca zweimal in einem Retreat genommen. Die erste Zeremonie war körperlich sehr anstrengend, die zweite war voller Liebe und Klarheit. Ich habe danach mit dem Rauchen aufgehört und fühle mich viel gesünder und glücklicher.",3,0,0,2,1,0,0,2,2
+apeq_0876,eng,"I noticed that my whole family communicates through criticism. I'm now very aware of it at every family dinner and it makes me uncomfortable.",0,3,0,1,0,0,2,0,0
+apeq_0877,ger,"Ich hatte während der Erfahrung große Angst, weil ich dachte, dass ich nicht mehr zurückkomme. Danach war ich einige Tage durcheinander.",0,0,0,3,0,0,0,0,0
+apeq_0878,eng,"My depression lifted, I feel hopeful and I have energy to do things again. I'm really grateful for this experience.",3,0,0,0,0,0,0,1,0
+apeq_0879,ger,"Ich bin achtsamer, nehme meine Gefühle besser wahr und erkenne früher, wenn ich mich überfordere.",0,3,0,0,0,0,0,0,0
+apeq_0880,eng,"It reduced my fear of what other people think of me. I feel freer to just be myself and that makes me happier.",2,0,1,0,0,0,1,0,0

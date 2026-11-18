@@ -8,7 +8,7 @@ Questionnaires often contain open-ended questions ("Please describe your
 experience"), but the answers are rarely analysed, because turning free text
 into numbers used to require trained human coders. The study asks: **if we let
 a language model turn these answers into numbers, do they improve the
-prediction of clinically relevant outcomes, beyond all the other information we
+prediction of mental health outcomes, beyond all the other information we
 have about the participants?**
 
 ## Three datasets

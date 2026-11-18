@@ -1,13 +1,13 @@
-# Predictions from free-text responses in clinical studies: reproducible pipeline on synthetic data
+# Predictions from free-text responses in mental health research: reproducible pipeline on synthetic data
 
 [Author note: This README is AI-generated (Claude Code, Opus 5.5). For the AI 
 usage statement for the study itself, please see the respective section in the 
 manuscript.]
 
-Analysis code for "Improving predictive accuracy for clinical outcomes with LLM
-text embeddings for open-ended free-text responses: A case study on reports of
-psychedelic experiences". The article, with the results of the real data, is
-[`manuscript.pdf`](manuscript.pdf).
+Analysis code for "Free-text responses improve prediction of mental health
+outcomes after psychedelic experiences". The article, with the results of the real data, is
+[`manuscript.pdf`](manuscript.pdf), its Supplementary Information
+[`manuscript_SI.pdf`](manuscript_SI.pdf).
 
 **New here?** The [wiki](wiki/Home.md) explains step by step how the analysis
 works and how to reproduce it, for readers of the paper.
@@ -36,9 +36,8 @@ useful manner.
 Rscript run_all.R
 ```
 
-from the repository root, then compile `tex/main_v2.tex` (pdfLaTeX + biber;
-`tex/main_v2_translated.tex` is the version with English translations of German
-example responses). The steps:
+from the repository root, then compile `tex/manuscript_synthetic.tex` (pdfLaTeX + biber)
+and `tex/manuscript_synthetic_SI.tex` (pdfLaTeX). The steps:
 
 0. `synthetic/generate.R` writes the synthetic raw files to `data/raw/`
    (seeded; also committed, so this step is skipped).
@@ -101,11 +100,12 @@ signal where there is one and finds nothing where there is none.
 
 ## The manuscripts in this repository
 
-`manuscript.pdf` is the article with the results of the real data.
+`manuscript.pdf` and `manuscript_SI.pdf` are the article and its Supplementary
+Information with the results of the real data.
 
-`tex/main_v2_translated.tex` (and `tex/main_v2.tex`, with German example
-responses untranslated) is the same manuscript text, unchanged, filled with the
-results of the synthetic run:
+`tex/manuscript_synthetic.tex` and `tex/manuscript_synthetic_SI.tex` are the same text, unchanged,
+filled with the results of the synthetic run (German example responses are
+shown in English translation, as in the article):
 
 * **purple**: every number, table entry, example response and figure produced
   by the pipeline from the synthetic data;
@@ -124,7 +124,7 @@ availability statement of the article.
 
 | Path | Content |
 |---|---|
-| `manuscript.pdf` | the article (real data) |
+| `manuscript.pdf`, `manuscript_SI.pdf` | the article and its Supplementary Information (real data) |
 | `wiki/` | how the analysis works and how to reproduce it |
 | `run_all.R` | runs the whole pipeline |
 | `R/config.R` | every setting: models, seeds, grids |
@@ -147,7 +147,7 @@ availability statement of the article.
 * **Synthetic data, texts and results** (`data/raw/`, `synthetic/texts/`,
   `synthetic/spec_public/`, `synthetic/privacy_report.md`, `translations/`,
   `tex/generated/`), this README and the wiki: CC BY 4.0, see `LICENSE-CC-BY-4.0.md`.
-* **Article and manuscript** (`manuscript.pdf`, `tex/main_v2*.tex` and PDFs,
+* **Article and manuscript** (`manuscript.pdf`, `manuscript_SI.pdf`, `tex/manuscript_synthetic*.tex` and PDFs,
   `tex/workflow.pdf`, `tex/lit.bib`):
   not licensed for reuse; all rights remain with the authors.
 

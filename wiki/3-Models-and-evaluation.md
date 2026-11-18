@@ -60,7 +60,7 @@ confidence interval from the same corrected standard error.
 These use one single (non-repeated, non-nested) 10-fold cross-validation run:
 
 * **Number of components (sweeps).** The same models with 2 to 100 text
-  components (PTSD: up to 60; Supplementary Material, Figures 2 and 3).
+  components (PTSD: up to 60; Supplementary Information, Supplementary Figures 1 and 2).
 * **Qualitative examples.** For each participant, the held-out prediction of
   the baseline and of the *baseline + text* model are compared. The 15
   responses where adding the text reduced the prediction error the most are
@@ -68,7 +68,7 @@ These use one single (non-repeated, non-nested) 10-fold cross-validation run:
   prediction, and in which direction).
 * **Overlap with the other predictors** ([`R/overlap.R`](../R/overlap.R)). How
   much of each other predictor can be predicted from the 20 text components
-  (Table 2), and how much of the outcome-relevant text information the other
+  (Table 3), and how much of the outcome-relevant text information the other
   predictors already contain (*text signal*). This shows whether the texts
   merely repeat what the questionnaires measure.
 

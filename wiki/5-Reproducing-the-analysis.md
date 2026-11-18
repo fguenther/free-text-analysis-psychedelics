@@ -36,8 +36,8 @@ or `source("run_all.R")` in R/RStudio. This runs every step:
 | 4 | overlap analysis | `results/` |
 | 5 | figures, tables and numbers for the manuscript | `tex/generated/` |
 
-Then compile `tex/main_v2_translated.tex` (or `main_v2.tex`) with pdfLaTeX,
-biber, and pdfLaTeX twice.
+Then compile `tex/manuscript_synthetic.tex` with pdfLaTeX, biber, and pdfLaTeX twice,
+and `tex/manuscript_synthetic_SI.tex` with pdfLaTeX (twice).
 
 **Runtime.** About three hours on a desktop computer (14 cores), most of it
 for the embeddings and the nested cross-validation. To skip the nested

@@ -4,15 +4,16 @@
 usage statement for the study itself, please see the respective section in the
 manuscript.]
 
-This wiki accompanies the article *"Improving predictive accuracy for clinical
-outcomes with LLM text embeddings for open-ended free-text responses: A case
-study on reports of psychedelic experiences"* ([`manuscript.pdf`](../manuscript.pdf)).
+This wiki accompanies the article *"Free-text responses improve prediction of
+mental health outcomes after psychedelic experiences"*
+([`manuscript.pdf`](../manuscript.pdf), Supplementary Information:
+[`manuscript_SI.pdf`](../manuscript_SI.pdf)).
 It explains, without going deep into the code, what the analysis does and how
 you can run it yourself.
 
 **In one sentence:** participants described their psychedelic experiences in
 their own words; we turned these texts into numbers with a language model and
-tested whether they improve the prediction of clinical outcomes beyond
+tested whether they improve the prediction of mental health outcomes beyond
 everything else we knew about the participants.
 
 ## The analysis at a glance
@@ -47,8 +48,8 @@ The same pipeline is shown in Figure 1 of the article ([`tex/workflow.pdf`](../t
 
 | File | Data | What it is for |
 |---|---|---|
-| [`manuscript.pdf`](../manuscript.pdf) | **real** participant data | the article: all reported findings |
-| [`tex/main_v2_translated.pdf`](../tex/main_v2_translated.pdf) (and `main_v2.pdf`) | **synthetic** data | the same text, filled by this repository's pipeline; shows that the code produces every number, table and figure |
+| [`manuscript.pdf`](../manuscript.pdf), [`manuscript_SI.pdf`](../manuscript_SI.pdf) | **real** participant data | the article and its Supplementary Information: all reported findings |
+| [`tex/manuscript_synthetic.pdf`](../tex/manuscript_synthetic.pdf), [`tex/manuscript_synthetic_SI.pdf`](../tex/manuscript_synthetic_SI.pdf) | **synthetic** data | the same text, filled by this repository's pipeline; shows that the code produces every number, table and figure |
 
 Only the article (`manuscript.pdf`) reports findings. The synthetic version
 demonstrates the pipeline; its numbers are not results about people.

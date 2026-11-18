@@ -48,7 +48,7 @@ The code is identical to the code that produced the article; only
 
 | Path | Content |
 |---|---|
-| `main_v2_translated.tex` / `.pdf` | synthetic manuscript, German examples translated |
-| `main_v2.tex` / `.pdf` | synthetic manuscript, examples in the original language |
+| `manuscript_synthetic.tex` / `.pdf` | synthetic manuscript (German examples translated) |
+| `manuscript_synthetic_SI.tex` / `.pdf` | synthetic Supplementary Information |
 | `generated/` | numbers, tables and figures written by the pipeline |
 | `lit.bib`, `workflow.pdf` | bibliography, pipeline figure |

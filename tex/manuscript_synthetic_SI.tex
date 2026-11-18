@@ -1,0 +1,87 @@
+\documentclass[man,floatsintext]{apa7}
+
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{soul}
+\usepackage{arydshln}
+\usepackage{threeparttable}
+\usepackage[section]{placeins}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{soul}
+\usepackage[utf8]{inputenc}
+\usepackage[export]{adjustbox}
+
+% synthetic-data version: the revision markup is printed as plain text, so
+% that only purple (synthetic results) and red (text that does not fit them)
+% carry meaning
+\newcommand{\change}[1]{#1}
+
+\input{generated/results}
+% synthetic-data version: values are wrapped in \synth, so counts are printed
+% as digits and the plural form is used
+\newcommand{\resword}[1]{\res{#1}}
+\newcommand{\resnum}[3]{#3}
+
+\title{Supplementary Information for: Free-text responses improve prediction of mental health outcomes after psychedelic experiences}
+\authorsnames[1,1,{1,2},1,{1,2},{1,2,*},{1,2,*}]{{Fritz G\"unther},{Mathis Parent-Couture},{Abdo Uyar},{Klara Wieczorke},{Ulrike Lueken},{Ricarda Evens},{Max Wolff}}
+\authorsaffiliations{{Department of Psychology, Humboldt-Universit\"at zu Berlin, Berlin, Germany},{German Center for Mental Health (DZPG), partner site Berlin-Potsdam, Berlin, Germany}}
+
+\note{\vspace{7mm}Corresponding author: \\Fritz G\"unther \\ Unter den Linden 6, 10099 Berlin \\ fritz.guenther{@}hu-berlin.de}
+
+\authornote{
+  *These authors contributed equally to this work and share last authorship.
+}
+
+\shorttitle{Supplementary Information}
+\abstract{}
+\renewcommand{\tablename}{Supplementary Table}
+\renewcommand{\figurename}{Supplementary Figure}
+
+\begin{document}
+\maketitle
+
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small\textbf{Synthetic-data version.} This is the Supplementary Information of the study, built by the pipeline of the public repository on a \emph{synthetic} dataset with newly written free-text responses and a planted text signal (the participant data cannot be published). The text of the manuscript is unchanged. \synth{Purple}: every number, table entry, example response and figure produced by the pipeline from the synthetic data. \synthmismatch{Red}: sentences that do not fit the synthetic results or describe only the original data.}}
+
+
+\section{Supplementary Note 1: Hyperparameter sweep and bge-m3 model}
+
+Supplementary Figure~\ref{fig:sweeps-e5} presents the cross-validated $R^2$ for all elastic net models reported in the main paper for different numbers of PCA components of the \emph{multilingual-e5-large} embeddings that are entered as predictors. \change{These results are based on a single (non-repeated, non-nested) \res{set.folds}-fold cross-validation run, as repeating the nested cross-validation for every number of components would have been computationally prohibitive. As the hyperparameters are selected on the same folds that are used for evaluation here, these $R^2$ values tend to be optimistic compared to the nested results in the main text \synthmismatch{(hardly in the APEQ data, but more clearly in the GCMQ data and especially in the comparatively small PTSD dataset)}; the informative part is therefore the comparison \emph{across} numbers of components. \synthmismatch{In the APEQ and GCMQ data, $R^2$ increases steeply up to about 10--15 components and remains largely stable up to about 40 components before slowly decreasing;} the \res{set.nprin} components used in the main analysis lie within this stable range. For PCL-5 in the PTSD data, the pattern is similar but noisier. For PTGI, no number of components leads to an increase over the baseline model.} Supplementary Figure~\ref{fig:sweeps-bge} presents the same information for the \emph{bge-m3} embeddings, where we find \synthmismatch{\change{comparable results, with one exception: for PCL-5, $R^2$ continues to increase up to 40--60 components, so that the main analysis with \res{set.nprin} components is, if anything, conservative here (although the gains at larger numbers of components, estimated on fewer than 210 training participants, are particularly prone to the optimism described above)}}. These results for the \emph{bge-m3} analysis are summarized in Supplementary Table~\ref{tab:results_summary_bge}, in the same format as Table~1 of the main text for the main  \emph{multilingual-e5-large} analysis.
+
+\begin{table}[!htbp]
+\small\renewcommand{\arraystretch}{0.9}%
+
+    \caption{Overview of the datasets and main results for all outcome variables considered here, using \textbf{bge-m3} text embeddings. \change{$R^2$ values are cross-validated (held-out) $R^2$ from the repeated nested cross-validation, with \res{set.nprin} PCA components per free-text response. The baseline + text model contains all free-text responses of the dataset (the pre-specified test); $\Delta R^2$ is tested with the corrected repeated $k$-fold $t$-test.}}
+
+    \centering
+    \input{generated/tab_summary_bge}
+
+    \label{tab:results_summary_bge}
+\end{table}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{generated/fig_sweeps_e5.pdf}
+  \caption{Cross-validated $R^2$ against the number of retained PCA components, for each dataset and outcome\change{ (single \res{set.folds}-fold cross-validation run)}. Text embeddings: multilingual-e5-large.}
+  \label{fig:sweeps-e5}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{generated/fig_sweeps_bge.pdf}
+  \caption{Cross-validated $R^2$ against the number of retained PCA components, for each dataset and outcome\change{ (single \res{set.folds}-fold cross-validation run)}. Text embeddings: bge-m3.}
+  \label{fig:sweeps-bge}
+\end{figure}
+    
+\end{document}

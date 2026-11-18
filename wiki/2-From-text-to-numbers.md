@@ -9,7 +9,7 @@ numbers, a **text embedding**. Texts with similar meaning get similar
 embeddings, in any language the model knows. No human coding is involved: the
 embedding is extracted directly from the model.
 
-| | Main analysis | Robustness check (Supplementary Material) |
+| | Main analysis | Robustness check (Supplementary Information) |
 |---|---|---|
 | Model | `intfloat/multilingual-e5-large` | `BAAI/bge-m3` |
 | Numbers per response | 1,024 | 1,024 |
@@ -31,7 +31,7 @@ embeddings are stored in `data/embeddings/`, so this step runs only once.
 support, and many of them carry overlapping information. We therefore
 summarise the embeddings of each response type with a **principal component
 analysis (PCA)** and keep the first **20 components**. Twenty is held constant
-across all analyses; the Supplementary Material shows how the results change
+across all analyses; the Supplementary Information shows how the results change
 with fewer or more components (the "sweep" figures).
 
 Importantly, the PCA is computed **inside the cross-validation** (next page):

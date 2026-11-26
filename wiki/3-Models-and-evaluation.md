@@ -13,7 +13,7 @@
 In datasets with several responses, there is one *baseline + text* model per
 combination of responses (GCMQ: events, health, both; PTSD: seven combinations
 of acute, post and treat). The model with **all** responses of a dataset is the
-**pre-specified test**; the other combinations are reported descriptively.
+**designated test**; the other combinations are reported descriptively.
 
 All models are **elastic net regressions**: linear regressions with a penalty
 that shrinks unhelpful coefficients towards zero. This keeps models with many,

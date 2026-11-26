@@ -259,7 +259,7 @@ write_results_tex <- function(vals, file) {
 
 ## --- Table 1: summary ---------------------------------------------------------------
 ## R^2 values and the test of Delta R^2 from the nested CV; the extended model
-## is the pre-specified one with all free-text responses (confirm_model)
+## is the designated one with all free-text responses (confirm_model)
 write_summary_table <- function(res, nres, emb, file) {
   cols <- paste(emb, c("APEQ/WHO", "APEQ/AAQ", "GCMQ/WEMWBS", "PTSD/PCL", "PTSD/PTGI"), sep = "/")
   rr   <- res[cols]
@@ -580,7 +580,7 @@ write_translated_examples <- function(res) {
 ##                                gain in %), 95% CI and corrected t-test
 ##                                (extended models); p is typeset with its
 ##                                relation, e.g. "p = .012" or "p < .001"
-##   k.confirm.*                  the pre-specified test: the extended model with
+##   k.confirm.*                  the designated test: the extended model with
 ##                                all free-text responses (confirm_model)
 ##   k.best.*                     the extended model with the largest Delta R^2
 ##                                vs. baseline (nested_best; the same as the
@@ -594,7 +594,7 @@ fmt_p <- function(p) {
 ## p alone, for table cells
 fmt_pval <- function(p) if (p < .001) "$<$ .001" else fmt_r2(p)
 
-## the pre-specified extended model: all free-text responses of the dataset
+## the designated extended model: all free-text responses of the dataset
 confirm_model <- function(n) {
   ext <- setdiff(n$main$model, c("none", "text_only"))
   ext[which.max(lengths(strsplit(ext, "+", fixed = TRUE)))]
